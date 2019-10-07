@@ -1,7 +1,7 @@
 {
-  "name": "201909091148",
+  "name": "ichat",
   "version": "1.0.0",
-  "description": "201909091148",
+  "description": "Project 201910071947 (IChat v2)",
   "main": "src/index.js",
   "scripts": {
     "build": "webpack --mode production --config webpack.config.pro.js",
@@ -30,6 +30,14 @@
   "dependencies": {
     "serve": "^11.1.0"
   },
-  "author": "Imesh Chamara <imesh1chamara@gmail.com> (http://ic-tech.dx.am/)",
-  "license": "ISC"
+  "author": "Imesh Chamara <imesh1chamara@gmail.com> (https://ic-tech.now.sh/)",
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/IC-Tech/201910071947.git"
+  },
+  "bugs": {
+    "url": "https://github.com/IC-Tech/201910071947/issues"
+  },
+  "homepage": "https://github.com/IC-Tech/201910071947#readme"
 }

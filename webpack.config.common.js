@@ -8,7 +8,7 @@ const outputDirectory = 'public';
 
 module.exports = {
   entry: {
-    'p201909091148': './src/index.js'
+    'ichat': './src/index.js'
   },
   output: {
     path: path.join(__dirname, outputDirectory),
@@ -35,10 +35,10 @@ module.exports = {
     new webpack.ProgressPlugin(),
     new CleanWebpackPlugin(),
     new HtmlWebpackPlugin({
-      title: 'P201909091148',
+      title: 'IChat',
       template: './src/public/index.html',
       filename: 'index.html',
-      chunks: ['p201909091148', 'vendor'],
+      chunks: ['ichat', 'vendor'],
       favicon: './src/public/favicon.ico'
     }),
     new CopyPlugin([

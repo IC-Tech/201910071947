@@ -1,6 +1,6 @@
 {
-    "short_name": "P201909091148",
-    "name": "P201909091148",
+    "short_name": "IChat",
+    "name": "IC-Tech | IChat",
     "start_url": ".",
     "icons": [
         {
@@ -14,7 +14,7 @@
             "type": "image/png"
         }
     ],
-    "description": "P201909091148 by Imesh Chamara 2019",
+    "description": "IChat is simple chat app programmed by Imesh Chamara.",
     "theme_color": "#ffffff",
     "background_color": "#ffffff",
     "display": "standalone"

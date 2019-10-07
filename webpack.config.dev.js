@@ -29,6 +29,6 @@ module.exports = merge(common, {
     ]
   },
   devServer: {
-    host: '192.168.8.11'
+    host: '192.168.8.20'
   }
 });
