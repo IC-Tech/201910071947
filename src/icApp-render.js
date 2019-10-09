@@ -34,7 +34,8 @@ class icAppRender {
 	update(d) {
 		if(this.data) Object.assign(this.data, d)
 		if(this.render) {
-			this._elm({e: this.e, d: {ch: [this.render()]}})
+			var b = this.render()
+			this._elm({e: this.e, d: {ch: typeof b.length == 'undefined' ? [b] : b}})
 			if(this.a && this.didUpdate) this.didUpdate()
 			if(!this.a) this.a = true
 		}
