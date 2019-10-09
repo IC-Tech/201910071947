@@ -1,0 +1,113 @@
+@import 'common';
+@import url('fonts.css');
+body, a, span, p, textarea {
+  font-family: Roboto,Helvetica,'Segoe UI Emoji',-apple-system,BlinkMacSystemFont,Arial,'IC Noto Sans Sinhala','Segoe UI',Oxygen,Ubuntu,Cantarell,'Fira Sans','Droid Sans','Helvetica Neue', sans-serif;
+  color: col(text-color);
+}
+body, html {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+}
+* {
+  -webkit-backface-visibility: hidden;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}
+#root {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  margin: 0 auto;
+  background-color: rgb(224, 224, 224);
+  position: relative;
+}
+.ICApp {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background-color: #fff;
+  position: relative;
+  overflow-y: auto;
+}
+.app-bar {
+  display: block;
+  height: 48px;
+  background-color: col(light-5);
+  box-shadow: 0 0 10px #0006;
+  padding: 0 16px;
+  z-index: 2;
+  > div {
+    height: 100%;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    * {
+      flex-shrink: 0;
+      flex-grow: 0;
+    }
+    &:nth-child(1) {
+      float: left;
+      span {
+        font-size: 22px;
+        font-weight: 500;
+        line-height: 1;
+        margin-top: -2px;
+        color: #fff;
+      }
+    }
+    &:nth-child(2) {
+      float: right;
+      cursor: pointer;
+      padding: 12px 10px;
+      margin-right: -6px;
+      div {
+        display: block;
+        background-color: #fff;
+        width: 28px;
+        height: 2px;
+        margin: 2px 0;
+        &:nth-child(1) {
+          margin-top: 0;
+        }
+      }
+    }
+  }
+}
+@keyframes load-ani {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+.main {
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  .load {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    div {
+      display: block;
+      width: 160px;
+      height: 160px;
+      border: 8px solid col(light-5);
+      border-left-color: #fff;
+      border-right-color: #fff;
+      border-radius: 50%;
+      animation: load-ani .8s infinite forwards normal ease;
+      margin: 0 auto;
+    }
+  }
+}
