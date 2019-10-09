@@ -5,7 +5,9 @@ import {IAR} from './icApp-render.js'
 import {IC_DEV} from './common.js'
 import './style.scss'
 
+document.addEventListener('DOMContentLoaded', () => {
 let icApp = ic.icApp
+let app = firebase.app()
 var _root_ = new icApp.e('#root')
 //_root_.chr()
 Theme.set('red')
@@ -39,3 +41,4 @@ class IChat extends IAR {
 	}
 }
 new IChat().mount(_root_.v)
+})
