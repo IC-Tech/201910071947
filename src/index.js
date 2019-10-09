@@ -7,7 +7,7 @@ import './style.scss'
 
 document.addEventListener('DOMContentLoaded', () => {
 let icApp = ic.icApp
-let app = firebase.app()
+firebase.performance()
 var _root_ = new icApp.e('#root')
 //_root_.chr()
 Theme.set('red')
@@ -21,23 +21,27 @@ class IChat extends IAR {
 	constructor() {
 		super()
 		this.data = {
-			UI: 0
+			UI: 0,
+			ready: false
 		}
+	}
+	didMount() {
+		this.update({ready:true})
 		setTimeout(a=> this.update({UI:1}), defaultWait)
 	}
-	didMount() {}
 	didUpdate() {}
 	render() {
-		return (
-			{ t: 'div', cl: 'ICApp', ch: [
-				{ t: 'div', cl: 'app-bar' },
-				{ t: 'div', cl: 'main', ch: [
-					{ t: 'div', s: {display: this.data.UI == 0 ? 'flex' : 'none'}, cl: 'load' },
-					{ t: 'div', s: {display: this.data.UI == 1 ? 'flex' : 'none'}, cl: 'cont', ch: [
+		return ([
+			{ s: {display: this.data.ready ? 'flex' : 'none'}, ch: [
+				{ },
+				{ ch: [
+					{ s: {display: this.data.UI == 0 ? 'flex' : 'none'} },
+					{ s: {display: this.data.UI == 1 ? 'flex' : 'none'}, ch: [
 					]}
 				]}
-			]}
-		)
+			]},
+			{ s: {display: !this.data.ready ? 'flex' : 'none'} }
+		])
 	}
 }
 new IChat().mount(_root_.v)
