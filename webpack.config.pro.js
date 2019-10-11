@@ -70,6 +70,16 @@ module.exports = merge(common, {
           collapseWhitespace: true
       }
     }),
+    new HtmlWebpackPlugin({
+      title: 'IChat',
+      template: './src/signin.html',
+      filename: 'signin.html',
+      chunks: ['signin', 'vendor'],
+      favicon: './src/public/favicon.ico',
+      minify: {
+          collapseWhitespace: true
+      }
+    }),
     /*new CompressionPlugin()*/
   ],
   optimization: {

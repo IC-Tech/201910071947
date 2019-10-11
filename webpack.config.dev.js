@@ -37,6 +37,13 @@ module.exports = merge(common, {
       chunks: ['ichat', 'vendor'],
       favicon: './src/public/favicon.ico'
     }),
+    new HtmlWebpackPlugin({
+      title: 'IChat',
+      template: './src/signin.html',
+      filename: 'signin.html',
+      chunks: ['signin', 'vendor'],
+      favicon: './src/public/favicon.ico'
+    })
   ],
   devServer: {
     host: '192.168.8.20'
