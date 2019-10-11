@@ -58,14 +58,20 @@ class IChat extends IAR {
 				{ ch: [
 					{ s: {display: this.data.UI == 0 ? 'flex' : 'none'} },
 					{ s: {display: this.data.UI == 1 ? 'flex' : 'none'}, ch: [
-						{ ch: [
+						{ s:{display: this.data.UI2 == 0 ? 'block' : 'none'}, ch: [
 							{}, {}, {},
 							{ ch: [
 								{ s: {display: !this.data.user ? 'inline-block' : 'none' }},
-								{ s: {display: this.data.user ? 'inline-block' : 'none' }}
+								{ s: {display: this.data.user ? 'inline-block' : 'none' }, e: [['onclick', a => this.update({UI2: 1})]]}
 							]}
 						]},
-						//{}
+						{ s:{display: this.data.UI2 == 1 ? 'block' : 'none'}, ch: [
+							{ ch: [
+								{},
+								{}
+							]}, 
+							{}
+						]}
 					]}
 				]}
 			]},
