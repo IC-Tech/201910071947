@@ -9,11 +9,9 @@ document.addEventListener('DOMContentLoaded', () => {
 let icApp = ic.icApp
 firebase.performance()
 var _root_ = new icApp.e('#root')
-//_root_.chr()
 Theme.set('red')
 
 const defaultWait = 1200
-const MaxChartData = 1000
 const Project = '201910071947'
 const PublicName = 'IChat'
 
@@ -22,21 +20,50 @@ class IChat extends IAR {
 		super()
 		this.data = {
 			UI: 0,
+			UI2: 0,
 			ready: false
 		}
 	}
 	didMount() {
+		document.addEventListener('click', a => {
+			a = {a: new icApp.e(a.target), b: 0}
+			for(var b=0; b<3 && a.b == 0; b++)
+				a.b = (a.a.v.id == 'menu-btn' ? 1 : (a.a = a.a.p) ? 0 : 0)
+			if(a.b == 0) icApp.ds({t: 'mb'}).v.checked = false
+		})
 		this.update({ready:true})
 		setTimeout(a=> this.update({UI:1}), defaultWait)
 	}
 	didUpdate() {}
+	close() {
+		window.close()
+	}
 	render() {
 		return ([
 			{ s: {display: this.data.ready ? 'flex' : 'none'}, ch: [
-				{ },
+				{ ch: [
+					{},
+					{ ch: [
+						{}, {},
+						{ ch: [
+							{s: {display: !this.data.user ? 'inline-block' : 'none'}},
+							{s: {display: this.data.user ? 'inline-block' : 'none'}, at:[['href', `/profile.html?user=${this.data.user ? this.data.user.name : ''}`]]},
+							{}, {},
+							{ e: [['onclick', this.close]]}
+						]}
+					]}
+				]},
 				{ ch: [
 					{ s: {display: this.data.UI == 0 ? 'flex' : 'none'} },
 					{ s: {display: this.data.UI == 1 ? 'flex' : 'none'}, ch: [
+						{ ch: [
+							{}, {}, {},
+							{ ch: [
+								{ s: {display: !this.data.user ? 'inline-block' : 'none' }},
+								{ s: {display: this.data.user ? 'inline-block' : 'none' }}
+							]}
+						]},
+						//{}
 					]}
 				]}
 			]},

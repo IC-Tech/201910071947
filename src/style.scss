@@ -1,2 +1,40 @@
 /* Copyright © Imesh Chamara 2019 */
 @import 'main.scss';
+.main .cont {
+	.home {
+		width: 80%;
+		max-width: 600px;
+		span {
+			display: block;
+			width: 100%;
+			text-align: center;
+		}
+		> div{
+			margin: 0 auto;
+			&.c1 {
+				background-image: url('/images/artboard-10-512px.png');
+				width: 80vw;
+				height: 60vw;
+				max-width: 512px;
+				max-height: 384px;
+				background-size: cover;
+				background-position: center center;
+			}
+			&:not(.c1) {
+				width: 80%;
+				max-width: 280px;
+				&, > * {
+					display: block;
+				}
+				> * {
+					width: 100%;
+				}
+			}
+		}
+	}
+	span.c1 {
+		font-size: 28px;
+		font-weight: 500;
+		color: col(light-9);
+	}
+}
