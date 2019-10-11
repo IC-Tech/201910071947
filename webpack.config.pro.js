@@ -60,6 +60,16 @@ module.exports = merge(common, {
       filename: 'style/[name].css',
       chunkFilename: 'style/[id].css',
     }),
+    new HtmlWebpackPlugin({
+      title: 'IChat',
+      template: './src/index.html',
+      filename: 'index.html',
+      chunks: ['ichat', 'vendor'],
+      favicon: './src/public/favicon.ico',
+      minify: {
+          collapseWhitespace: true
+      }
+    }),
     /*new CompressionPlugin()*/
   ],
   optimization: {

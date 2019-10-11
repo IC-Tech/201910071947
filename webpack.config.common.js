@@ -1,6 +1,5 @@
 const path = require('path');
 const webpack = require('webpack')
-const HtmlWebpackPlugin= require('html-webpack-plugin')
 const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 const CopyPlugin = require('copy-webpack-plugin')
 
@@ -34,13 +33,6 @@ module.exports = {
   plugins: [
     new webpack.ProgressPlugin(),
     new CleanWebpackPlugin(),
-    new HtmlWebpackPlugin({
-      title: 'IChat',
-      template: './src/public/index.html',
-      filename: 'index.html',
-      chunks: ['ichat', 'vendor'],
-      favicon: './src/public/favicon.ico'
-    }),
     new CopyPlugin([
       {
         from: 'src/public',

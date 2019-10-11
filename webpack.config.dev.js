@@ -2,6 +2,7 @@ const webpack = require('webpack')
 const merge = require('webpack-merge')
 const common = require('./webpack.config.common.js')
 const autoprefixer = require('autoprefixer')
+const HtmlWebpackPlugin= require('html-webpack-plugin')
 
 module.exports = merge(common, {
   module: {
@@ -28,6 +29,15 @@ module.exports = merge(common, {
       }
     ]
   },
+  plugins: [
+    new HtmlWebpackPlugin({
+      title: 'IChat',
+      template: './src/index.html',
+      filename: 'index.html',
+      chunks: ['ichat', 'vendor'],
+      favicon: './src/public/favicon.ico'
+    }),
+  ],
   devServer: {
     host: '192.168.8.20'
   }
