@@ -25,6 +25,9 @@ class IChat extends IAR {
 		}
 	}
 	didMount() {
+		firebase.auth().onAuthStateChanged(user => {
+			this.update({user, UI: 1})
+		})
 		document.addEventListener('click', a => {
 			a = {a: new icApp.e(a.target), b: 0}
 			for(var b=0; b<3 && a.b == 0; b++)
@@ -32,7 +35,6 @@ class IChat extends IAR {
 			if(a.b == 0) icApp.ds({t: 'mb'}).v.checked = false
 		})
 		this.update({ready:true})
-		setTimeout(a=> this.update({UI:1}), defaultWait)
 	}
 	didUpdate() {}
 	close() {
@@ -47,7 +49,7 @@ class IChat extends IAR {
 						{}, {},
 						{ ch: [
 							{s: {display: !this.data.user ? 'inline-block' : 'none'}},
-							{s: {display: this.data.user ? 'inline-block' : 'none'}, at:[['href', `/profile.html?user=${this.data.user ? this.data.user.name : ''}`]]},
+							{s: {display: this.data.user ? 'inline-block' : 'none'}, at:[['href', `/profile.html?tid=${this.data.user ? this.data.user.uid : ''}`]]},
 							{}, {},
 							{ e: [['onclick', this.close]]}
 						]}
