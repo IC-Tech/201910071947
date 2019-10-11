@@ -1,6 +1,10 @@
 /* Copyright © Imesh Chamara 2019 */
 @import 'main.scss';
 .main .cont {
+	flex-direction: column;
+	justify-content: center;
+	width: 100%;
+	height: 100%;
 	.home {
 		width: 80%;
 		max-width: 600px;
@@ -36,5 +40,58 @@
 		font-size: 28px;
 		font-weight: 500;
 		color: col(light-9);
+	}
+	.messages {
+		display: block;
+		width: 100%;
+		height: 100%;
+		> .c1 {
+			display: block;
+			width: 100%;
+			height: calc(100% - 26px);
+			background-position: center top;
+			background-size: cover;
+			> .c1 {
+				display: none;
+			}
+		}
+		> .c2 {
+			display: flex;
+			flex-direction: row;
+			position: absolute;
+			bottom: 0;
+			box-shadow: 0 0 10px #0006;
+			height: 26px;
+			width: 100%;
+			> * {
+				box-sizing: border-box;
+				border: 0;
+			}
+			input {
+				width: calc(100% - 52px);
+			}
+			button {
+				width: 52px;
+				background-color: col(light-5);
+				color: #fff;
+				border-left: 1px solid col(light-5) !important;
+				&:active {
+					color: #000;
+					background-color: #fff;
+				}
+			}
+		}
+		.m1 {
+			div {
+				&:nth-child(1) {
+					width: 38px;
+					height: 38px;
+					background-size: cover;
+					background-position: top center;
+					border: 2px solid col(light-9);
+					border-radius: 50%;
+				}
+			}
+		}
 	}
 }
