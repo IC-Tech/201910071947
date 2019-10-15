@@ -7,12 +7,6 @@ var app = admin.initializeApp({
   databaseURL: "https://ichat-ictech.firebaseio.com"
 });
 
-// // Create and Deploy Your First Cloud Functions
-// // https://firebase.google.com/docs/functions/write-firebase-functions
-//
-// exports.helloWorld = functions.https.onRequest((request, response) => {
-//  response.send("Hello from Firebase!");
-// });
 console.log("IChat Functions Start => ", new Date().toString())
 const CEmail = functions.config().email.address;
 const CPassword = functions.config().email.password;
