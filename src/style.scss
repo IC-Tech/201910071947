@@ -128,9 +128,14 @@
 		.m2 {
 			div.con {
 				width: calc(100% - 10px);
+				display: flex;
+				flex-direction: column;
 			}
 			span {
-				float: right;
+				text-align: right;
+				&:nth-child(1) {
+					margin-left: auto;
+				}
 				&:nth-child(2) {
 					margin-bottom: 10px;
 				}
