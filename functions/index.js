@@ -36,9 +36,32 @@ const JInit = a => ([
   ['WebServer', 'IC-Tech Server; Copyright (c) Imesh Chamara 2019'],
   ['Content-Type', 'application/json; charset=UTF-8']
 ]).forEach(b => a.set(b[0], b[1]))
+const queryC = (a,d, ...b) => {
+	JInit(d)
+	var c = []
+	b = b.map((b, d) => a.query[b] && a.query[b] != '' ? a.query[b] : c.push(b + ' is required'))
+	if(c.length > 0) {
+		d.send(Send(c, false))
+	}
+	return c.length > 0 ? false : b
+}
+const sysErr = (a, b) => {
+	JInit(a)
+	a.send(Send(b ? b : ['Failed to response', 'undefined system error', 'Internal Server Error'], false))
+}
 
 exports.sendWelcomeEmail = functions.auth.user().onCreate(async user => {
 });
 exports.getUser = functions.https.onRequest(async (req, res) => {
-	JInit(res)
+	var q = queryC(req, res, 'uid')
+	if(q == false) return
+	var a
+	try {
+	  a = await admin.auth().getUser(q[0])
+	}
+	catch(e) {
+		if(e.code == 'auth/user-not-found') return sysErr(res, ['User not found'])
+		return sysErr(res)
+	}
+	res.send(Send(sendJ(a, 'uid', 'displayName', 'photoURL')))
 })
