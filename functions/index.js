@@ -57,11 +57,10 @@ exports.getUser = functions.https.onRequest(async (req, res) => {
 	if(q == false) return
 	var a
 	try {
-	  a = await admin.auth().getUser(q[0])
+	  res.send(Send(sendJ(await admin.auth().getUser(q[0]), 'uid', 'displayName', 'photoURL')))
 	}
 	catch(e) {
 		if(e.code == 'auth/user-not-found') return sysErr(res, ['User not found'])
 		return sysErr(res)
 	}
-	res.send(Send(sendJ(a, 'uid', 'displayName', 'photoURL')))
 })
