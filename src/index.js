@@ -23,6 +23,9 @@ class IChat extends IAR {
 			UI2: 0,
 			ready: false
 		}
+		var a = firebase.app().options
+		this.functions = IC_DEV ? `http://192.168.8.20:5001/${a.projectId}/${a.locationId}1/` : `https://${a.locationId}1-${a.projectId}.cloudfunctions.net/`
+		this.users = []
 	}
 	didMount() {
 		firebase.auth().onAuthStateChanged(user => {
