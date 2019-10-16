@@ -6,3 +6,4 @@ firebase-debug.log
 public/
 functions/.runtimeconfig.json
 functions/serviceAccountKey.json
+.tmp/
