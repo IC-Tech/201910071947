@@ -2,7 +2,7 @@
 import './icApp.js'
 import {Theme, initTheme, setTheme} from './Theme.js'
 import {IAR} from './icApp-render.js'
-import {IC_DEV} from './common.js'
+import {IC_DEV, XHR} from './common.js'
 import './style.scss'
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -25,7 +25,32 @@ class IChat extends IAR {
 		}
 		var a = firebase.app().options
 		this.functions = IC_DEV ? `http://192.168.8.20:5001/${a.projectId}/${a.locationId}1/` : `https://${a.locationId}1-${a.projectId}.cloudfunctions.net/`
-		this.users = []
+		this.users = JSON.parse(localStorage.getItem('IC-Tech.IChat:Users'))
+		if(!this.users) this.users = {}
+		this.user = ''
+		this.userInit = a => {
+			if(a && !this.users[a]) {
+				this.users[a] = {uid: a, name: '', image: '', a: false}
+				XHR(this.functions + 'getUser?uid=' + a, a => {
+					if(!a || !a.success) {
+						return
+					}
+					this.users[(a = a.response).uid] = {uid: a.uid, name: a.displayName, image: a.photoURL}
+					this.users[a.uid].a = true
+					localStorage.setItem('IC-Tech.IChat:Users', JSON.stringify(this.users))
+					this.update()
+				})
+			}
+			return this.users
+		}
+		this.mc = a => ([this.userInit(a.u),({t:'div', cl: ['ms', this.user == a.u ? 'm2': 'm1'], ch: /*this.user == a.u ? [this.mc.a(a)] :*/ [
+			{t:'div', at:[['title', this.users[a.u].name]], s: {'background-image': `url("${this.users[a.u].image}")` }},
+			this.mc.a(a)
+		]})])[1]
+		this.mc.a = a => ({t:'div', cl: 'con', ch: [
+				{t: 'span', txt: a.m },
+				{t: 'span', txt: new Date(a.t).toString() }
+			]})
 	}
 	didMount() {
 		firebase.auth().onAuthStateChanged(user => {
