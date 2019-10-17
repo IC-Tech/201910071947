@@ -43,6 +43,7 @@ class IChat extends IAR {
 			}
 			return this.users
 		}
+		this.messages = []
 		this.mc = a => ([this.userInit(a.u),({t:'div', cl: ['ms', this.user == a.u ? 'm2': 'm1'], ch: /*this.user == a.u ? [this.mc.a(a)] :*/ [
 			{t:'div', at:[['title', this.users[a.u].name]], s: {'background-image': `url("${this.users[a.u].image}")` }},
 			this.mc.a(a)
@@ -54,6 +55,7 @@ class IChat extends IAR {
 	}
 	didMount() {
 		firebase.auth().onAuthStateChanged(user => {
+			if(user) this.user = user.uid
 			this.update({user, UI: 1})
 		})
 		document.addEventListener('click', a => {
@@ -96,7 +98,7 @@ class IChat extends IAR {
 						{ s:{display: this.data.UI2 == 1 ? 'block' : 'none'}, ch: [
 							{ ch: [
 								{},
-								{}
+								{ ch: this.messages.map(a => this.mc(a))}
 							]}, 
 							{}
 						]}
