@@ -73,6 +73,8 @@
 			}
 			input {
 				width: calc(100% - 52px);
+				box-sizing: border-box;
+				padding: 0 8px;
 			}
 			button {
 				width: 52px;
@@ -118,10 +120,12 @@
 					width: 34px;
 					height: 34px;
 					background-size: cover;
+					background-image: url('/images/avatar/default.png');
 					background-position: top center;
 					border: 2px solid col(light-9);
 					border-radius: 50%;
 					margin: 4px;
+					cursor: pointer;
 				}
 			}
 		}
