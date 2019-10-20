@@ -55,8 +55,10 @@ class IChat extends IAR {
 	}
 	didMount() {
 		firebase.auth().onAuthStateChanged(user => {
-			if(user) this.user = user.uid
 			this.update({user, UI: 1})
+			if(!user) return
+			this.user = user.uid
+			this.firestore = firebase.firestore()
 		})
 		document.addEventListener('click', a => {
 			a = {a: new icApp.e(a.target), b: 0}
@@ -65,6 +67,17 @@ class IChat extends IAR {
 			if(a.b == 0) icApp.ds({t: 'mb'}).v.checked = false
 		})
 		this.update({ready:true})
+	}
+	send(a) {
+		if(!this.user) return
+		var a = icApp.ds({t:'mess',i:'0'}).v
+		a = ([a.value, a.value = '', a.focus()])[0]
+		if(!a) return
+		this.firestore.collection('messages').add({
+			m: a,
+			u: this.user,
+			t: firebase.firestore.FieldValue.serverTimestamp()
+		}).catch(e => console.error('Error writing new message to Firebase Database', e))
 	}
 	didUpdate() {}
 	close() {
@@ -100,7 +113,10 @@ class IChat extends IAR {
 								{},
 								{ ch: this.messages.map(a => this.mc(a))}
 							]}, 
-							{}
+							{ ch: [
+								{},
+								{ e: [['onclick', this.send ]]}
+							]}
 						]}
 					]}
 				]}
