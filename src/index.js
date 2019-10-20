@@ -45,7 +45,7 @@ class IChat extends IAR {
 		}
 		this.messages = []
 		this.mc = a => ([this.userInit(a.u),({t:'div', cl: ['ms', this.user == a.u ? 'm2': 'm1'], ch: /*this.user == a.u ? [this.mc.a(a)] :*/ [
-			{t:'div', at:[['title', this.users[a.u].name]], s: {'background-image': `url("${this.users[a.u].image}")` }},
+			{t:'div', at:[['title', this.users[a.u].name]], s: {'background-image': this.users[a.u].image ? `url("${this.users[a.u].image}")` : '' }},
 			this.mc.a(a)
 		]})])[1]
 		this.mc.a = a => ({t:'div', cl: 'con', ch: [
