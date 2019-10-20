@@ -1,9 +1,12 @@
 /* Copyright © Imesh Chamara 2019 */
+'use strict';
 import './icApp.js'
 import {Theme, initTheme, setTheme} from './Theme.js'
 import {IAR} from './icApp-render.js'
 import {IC_DEV, XHR} from './common.js'
+import {dialogUI} from './dialog-ui.js'
 import './style.scss'
+import './dialog.scss'
 
 document.addEventListener('DOMContentLoaded', () => {
 let icApp = ic.icApp
@@ -23,6 +26,7 @@ class IChat extends IAR {
 			UI2: 0,
 			ready: false
 		}
+		this.send = this.send.bind(this)
 		var a = firebase.app().options
 		this.functions = IC_DEV ? `http://192.168.8.20:5001/${a.projectId}/${a.locationId}1/` : `https://${a.locationId}1-${a.projectId}.cloudfunctions.net/`
 		this.users = JSON.parse(localStorage.getItem('IC-Tech.IChat:Users'))
@@ -52,6 +56,19 @@ class IChat extends IAR {
 				{t: 'span', txt: a.m },
 				{t: 'span', txt: new Date(a.t).toString() }
 			]})
+		this.mess = (a => {
+			window.ic.t = a
+			console.log(a.docChanges())
+			a.docChanges().map(a => ({a: a.type == "added" ? 0 : (a.type == "modified" ? 1 : 2), i: (a = a.doc).id, d: a.data()})).forEach((a,b) => {
+				a.d.i = a.i
+				a.d.t = a.d.t ? a.d.t.toDate().getTime() : Date.now()
+				if(a.a == 0) this.messages.push(a.d)
+				else if(a.a == 1) {
+					this.messages = this.messages.map(b => a.i != b.i ? b : a.d)
+				}
+				this.update()
+			})
+		}).bind(this)
 	}
 	didMount() {
 		firebase.auth().onAuthStateChanged(user => {
@@ -59,6 +76,7 @@ class IChat extends IAR {
 			if(!user) return
 			this.user = user.uid
 			this.firestore = firebase.firestore()
+			this.firestore.collection('messages').orderBy('t', 'asc').limit(20).onSnapshot(this.mess)
 		})
 		document.addEventListener('click', a => {
 			a = {a: new icApp.e(a.target), b: 0}
@@ -71,6 +89,9 @@ class IChat extends IAR {
 	send(a) {
 		if(!this.user) return
 		var a = icApp.ds({t:'mess',i:'0'}).v
+		if(a.value.length >= 600) {
+			return dialogUI.create({name: 'Can not send Message', msg: 'The message was rejected by the server because the message was to large. maximum limit is 800 characters.', but: ['OK'],f: a=>dialogUI.remove(a.i)})
+		}
 		a = ([a.value, a.value = '', a.focus()])[0]
 		if(!a) return
 		this.firestore.collection('messages').add({
