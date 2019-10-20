@@ -73,7 +73,13 @@ class IChat extends IAR {
 						{ t: 'div', s: {display: !this.data.user ? 'flex' : 'none'}, ch: [
 							{t: 'span', txt: 'Signin To IChat', cl: 'c01' },
 							{t: 'div', ch: [
-								{t: 'button', cl: 'ic-btn0', txt: 'Signin With Google', e:[['onclick', a => this.GSignin()]] }
+								{t: 'span', cl: 'ic-btn0', txt: 'Sign in with Google', e:[['onclick', a => this.GSignin()]] },
+								{t: 'span', cl: ['ic-btn0', 'dis'], txt: 'Sign in with Email' },
+								{t: 'span', cl: ['ic-btn0', 'dis'], txt: 'Sign in with Twitter' },
+								{t: 'span', cl: ['ic-btn0', 'dis'], txt: 'Sign in with Github' },
+								{t: 'span', cl: ['ic-btn0', 'dis'], txt: 'Sign in with Yahoo' },
+								{t: 'span', cl: ['ic-btn0', 'dis'], txt: 'Sign in with Facebook' },
+								{t: 'span', cl: ['ic-btn0', 'dis'], txt: 'Sign in with Microsoft' }
 							]}
 						]},
 						{ t: 'div', s: {display: this.data.user ? 'flex' : 'none'}, ch: [
@@ -81,7 +87,7 @@ class IChat extends IAR {
 							{t: 'span', txt: 'You have already signin to IChat.', cl: 'c03' },
 							{t: 'div', ch: [
 								{t: 'a', cl: 'ic-btn0', at: [['href', '/']], txt: 'IChat' },
-								{t: 'button',cl: 'ic-btn0',  txt: 'Signout', e:[['onclick', a => this.signout()]] }
+								{t: 'span',cl: 'ic-btn0',  txt: 'Signout', e:[['onclick', a => this.signout()]] }
 							]}
 						]}
 					]}
