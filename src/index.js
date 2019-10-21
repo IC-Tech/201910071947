@@ -89,9 +89,7 @@ class IChat extends IAR {
 	send(a) {
 		if(!this.user) return
 		var a = icApp.ds({t:'mess',i:'0'}).v
-		if(a.value.length >= 600) {
-			return dialogUI.create({name: 'Can not send Message', msg: 'The message was rejected by the server because the message was to large. maximum limit is 800 characters.', but: ['OK'],f: a=>dialogUI.remove(a.i)})
-		}
+		if(a.value.length >= 800) return dialogUI.create({name: 'Can not send Message', msg: 'The message was rejected by the server because the message was to large. maximum limit is 800 characters.', but: ['OK'],f: a=>dialogUI.remove(a.i)})
 		a = ([a.value, a.value = '', a.focus()])[0]
 		if(!a) return
 		this.firestore.collection('messages').add({
