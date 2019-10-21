@@ -70,13 +70,17 @@ class IChat extends IAR {
 			})
 		}).bind(this)
 	}
+	start(user) {
+		if(!user || this.started) return
+		this.user = user.uid
+		this.firestore = firebase.firestore()
+		this.firestore.collection('messages').orderBy('t', 'asc').limit(20).onSnapshot(this.mess)
+		this.started = true
+	}
 	didMount() {
 		firebase.auth().onAuthStateChanged(user => {
 			this.update({user, UI: 1})
-			if(!user) return
-			this.user = user.uid
-			this.firestore = firebase.firestore()
-			this.firestore.collection('messages').orderBy('t', 'asc').limit(20).onSnapshot(this.mess)
+			this.start(user)
 		})
 		document.addEventListener('click', a => {
 			a = {a: new icApp.e(a.target), b: 0}
