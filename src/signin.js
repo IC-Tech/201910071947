@@ -22,12 +22,15 @@ class IChat extends IAR {
 			UI: 0,
 			ready: false
 		}
+		this.analytics = firebase.analytics()
+		this.performance = firebase.performance()
 		this.provider = new firebase.auth.GoogleAuthProvider();
 		this.provider.addScope('https://www.googleapis.com/auth/userinfo.email')
 	}
 	didMount() {
 		firebase.auth().onAuthStateChanged(user => {
 			this.update({user, UI: 1})
+			if(user) this.analytics.setUserId(user.uid)
 		})
 		firebase.auth().getRedirectResult().then(a => {
 			if (a.user) {
