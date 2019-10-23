@@ -7,7 +7,8 @@ import {IC_DEV, XHR} from './common.js'
 import {dialogUI} from './dialog-ui.js'
 import './style.scss'
 import './dialog.scss'
-
+window.ic = window.ic || []
+window.ic.pageLoad = Date.now()
 document.addEventListener('DOMContentLoaded', () => {
 let icApp = ic.icApp
 firebase.performance()
@@ -92,6 +93,7 @@ class IChat extends IAR {
 			if(a.b == 0) icApp.ds({t: 'mb'}).v.checked = false
 		})
 		this.update({ready:true})
+		gtag('event', 'page_mount_end', {pageMount: Date.now() - window.ic.pageLoad})
 	}
 	send(a) {
 		if(!this.user) return
@@ -106,6 +108,12 @@ class IChat extends IAR {
 		}).catch(e => console.error('Error writing new message to Firebase Database', e))
 	}
 	didUpdate() {}
+	willUpdate() {
+		if(this.data.UI2 != this.pevData.UI2) {
+			gtag('event', 'screen_view', { 'screen_name': (['homepage', 'messages'])[this.data.UI2] })
+		}
+		console.log([this.data, this.pevData])
+	}
 	close() {
 		window.close()
 	}
