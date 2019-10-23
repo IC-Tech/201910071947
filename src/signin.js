@@ -40,7 +40,10 @@ class IChat extends IAR {
 					'event_callback': a => {
 						location = location.origin
 				}})
-				setTimeout(a => location = location.origin, 4000)
+				setTimeout(a => {
+					gtag('event', 'exception', {'description': 'gtag event_callback failed', 'fatal': false})
+					location = location.origin
+				}, 4000)
 			}
 		})
 		document.addEventListener('click', a => {
