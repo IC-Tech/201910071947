@@ -29,11 +29,15 @@ class icAppRender {
 		this._ce = _ce.bind(this)
 		this.e = null
 		this.a = false
+		this.pevData = null
 		if(IC_DEV) __IC_DEV__[this.constructor.name] = this
 	}
 	update(d) {
-		if(this.data) Object.assign(this.data, d)
-		if(this.render) {
+		if(this.data) {
+			if(this.willUpdate) this.pevData = Object.assign({}, this.data)
+			Object.assign(this.data, d)
+		}
+		if(this.render && (typeof this.willUpdate == 'undefined' || !this.willUpdate())) {
 			var b = this.render()
 			this._elm({e: this.e, d: {ch: typeof b.length == 'undefined' ? [b] : b}})
 			if(this.a && this.didUpdate) this.didUpdate()
