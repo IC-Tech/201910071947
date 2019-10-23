@@ -24,17 +24,23 @@ class IChat extends IAR {
 		}
 		this.analytics = firebase.analytics()
 		this.performance = firebase.performance()
-		this.provider = new firebase.auth.GoogleAuthProvider();
+		this.provider = new firebase.auth.GoogleAuthProvider()
 		this.provider.addScope('https://www.googleapis.com/auth/userinfo.email')
 	}
 	didMount() {
 		firebase.auth().onAuthStateChanged(user => {
 			this.update({user, UI: 1})
 			if(user) this.analytics.setUserId(user.uid)
+			gtag('event', 'screen_view', { 'screen_name': this.data.user ? 'signedUser' : 'sign'})
 		})
 		firebase.auth().getRedirectResult().then(a => {
 			if (a.user) {
-				location = location.origin
+				gtag('event', a.additionalUserInfo.isNewUser ? 'sign_up' : 'login', {
+					method : a.additionalUserInfo.providerId == 'google.com' ? 'Google' : 'Unknown',
+					'event_callback': a => {
+						location = location.origin
+				}})
+				setTimeout(a => location = location.origin, 4000)
 			}
 		})
 		document.addEventListener('click', a => {
@@ -54,6 +60,7 @@ class IChat extends IAR {
 	}
 	signout() {
 		firebase.auth().signOut()
+		gtag('event', 'logout')
 	}
 	render() {
 		return ([
