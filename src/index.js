@@ -109,10 +109,7 @@ class IChat extends IAR {
 	}
 	didUpdate() {}
 	willUpdate() {
-		if(this.data.UI2 != this.pevData.UI2) {
-			gtag('event', 'screen_view', { 'screen_name': (['homepage', 'messages'])[this.data.UI2] })
-		}
-		console.log([this.data, this.pevData])
+		if(this.data.UI2 != this.pevData.UI2) gtag('event', 'screen_view', { 'screen_name': (['homepage', 'messages'])[this.data.UI2] })
 	}
 	close() {
 		window.close()
