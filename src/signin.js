@@ -24,8 +24,11 @@ class IChat extends IAR {
 		}
 		this.analytics = firebase.analytics()
 		this.performance = firebase.performance()
-		this.provider = new firebase.auth.GoogleAuthProvider()
-		this.provider.addScope('https://www.googleapis.com/auth/userinfo.email')
+		this.googleProvider = new firebase.auth.GoogleAuthProvider()
+		this.googleProvider.addScope('https://www.googleapis.com/auth/userinfo.email')
+		this.facebookProvider = new firebase.auth.FacebookAuthProvider()
+		this.facebookProvider.addScope('email')
+		this.facebookProvider.addScope('user_link')
 	}
 	didMount() {
 		firebase.auth().onAuthStateChanged(user => {
@@ -59,7 +62,10 @@ class IChat extends IAR {
 		window.close()
 	}
 	GSignin() {
-		firebase.auth().signInWithRedirect(this.provider)
+		firebase.auth().signInWithRedirect(this.googleProvider)
+	}
+	FSignin() {
+		firebase.auth().signInWithRedirect(this.facebookProvider)
 	}
 	signout() {
 		firebase.auth().signOut()
@@ -91,7 +97,7 @@ class IChat extends IAR {
 								{t: 'span', cl: ['ic-btn0', 'dis'], txt: 'Sign in with Twitter' },
 								{t: 'span', cl: ['ic-btn0', 'dis'], txt: 'Sign in with Github' },
 								{t: 'span', cl: ['ic-btn0', 'dis'], txt: 'Sign in with Yahoo' },
-								{t: 'span', cl: ['ic-btn0', 'dis'], txt: 'Sign in with Facebook' },
+								{t: 'span', cl: 'ic-btn0', txt: 'Sign in with Facebook', e:[['onclick', a => this.FSignin()]] },
 								{t: 'span', cl: ['ic-btn0', 'dis'], txt: 'Sign in with Microsoft' }
 							]}
 						]},
