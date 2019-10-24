@@ -81,6 +81,16 @@ module.exports = merge(common, {
       }
     }),
     new HtmlWebpackPlugin({
+      title: 'PageNotFound',
+      template: './src/404.html',
+      filename: '404.html',
+      chunks: [],
+      favicon: './src/public/favicon.ico',
+      minify: {
+          collapseWhitespace: true
+      }
+    }),
+    new HtmlWebpackPlugin({
       title: 'IChat',
       template: './src/signin.html',
       filename: 'signin.html',

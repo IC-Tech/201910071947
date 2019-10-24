@@ -45,6 +45,13 @@ module.exports = merge(common, {
       favicon: './src/public/favicon.ico'
     }),
     new HtmlWebpackPlugin({
+      title: 'PageNotFound',
+      template: './src/404.html',
+      filename: '404.html',
+      chunks: [],
+      favicon: './src/public/favicon.ico'
+    }),
+    new HtmlWebpackPlugin({
       title: 'IChat',
       template: './src/signin.html',
       filename: 'signin.html',
