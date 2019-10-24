@@ -71,6 +71,16 @@ module.exports = merge(common, {
       }
     }),
     new HtmlWebpackPlugin({
+      title: 'Offline',
+      template: './src/offline.html',
+      filename: 'offline.html',
+      chunks: [],
+      favicon: './src/public/favicon.ico',
+      minify: {
+          collapseWhitespace: true
+      }
+    }),
+    new HtmlWebpackPlugin({
       title: 'IChat',
       template: './src/signin.html',
       filename: 'signin.html',
