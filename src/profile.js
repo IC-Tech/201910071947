@@ -2,12 +2,11 @@
 import './icApp.js'
 import {Theme, initTheme, setTheme} from './Theme.js'
 import {IAR} from './icApp-render.js'
-import {IC_DEV} from './common.js'
+import {IC_DEV, XHR, pram} from './common.js'
 import './profile.scss'
 
 document.addEventListener('DOMContentLoaded', () => {
 let icApp = ic.icApp
-firebase.performance()
 var _root_ = new icApp.e('#root')
 Theme.set('red')
 
@@ -20,16 +19,35 @@ class IChat extends IAR {
 		super()
 		this.data = {
 			UI: 0,
-			ready: false
+			ready: false,
+			d: null,
+			edit: false
 		}
 		this.analytics = firebase.analytics()
 		this.performance = firebase.performance()
+		var a = firebase.app().options
+		this.functions = IC_DEV ? `http://192.168.8.20:5001/${a.projectId}/${a.locationId}1/` : `https://us-central1-${a.projectId}.cloudfunctions.net/`
 	}
 	didMount() {
 		firebase.auth().onAuthStateChanged(user => {
-			this.update({user, UI: 1})
-			if(user) this.analytics.setUserId(user.uid)
+			this.update(Object.assign({user}, user ? ({}) : ({UI:1})))
 			gtag('event', 'screen_view', { 'screen_name': this.data.user ? 'selfView' : 'profileView'})
+			if(!user) return
+			this.analytics.setUserId(user.uid)
+			var a = pram('tid')
+			if(!a) {
+				a = this.data.user.uid
+				var b = new URL(location.href)
+				b.searchParams.set('tid', a)
+				history.pushState({IC_Nav: true}, icApp.qs('title').txt, b.href)
+			}
+			XHR(this.functions + 'getFullUser?uid=' + a, a => {
+				if(!a || !a.success) {
+					console.log(a)
+					return
+				}
+				this.update({UI: 1, d: a.response})
+			})
 		})
 		document.addEventListener('click', a => {
 			a = {a: new icApp.e(a.target), b: 0}
@@ -39,7 +57,12 @@ class IChat extends IAR {
 		})
 		this.update({ready:true})
 	}
-	didUpdate() {}
+	didUpdate() {
+		var a = icApp.ds({t: 'edit', i:0})
+		if(this.data.d && a.val != this.data.d.displayName) a.val = this.data.d.displayName
+		a = icApp.ds({t: 'edit', i:1})
+		if(this.data.d && a.val != this.data.d.about) a.val = this.data.d.about
+	}
 	render() {
 		return ([
 			{ s: {display: this.data.ready ? 'flex' : 'none'}, ch: [
@@ -58,7 +81,31 @@ class IChat extends IAR {
 				{ ch: [
 					{ s: {display: this.data.UI == 0 ? 'flex' : 'none'} },
 					{ s: {display: this.data.UI == 1 ? 'flex' : 'none'}, ch: [
-						{ s: {display: this.data.user ? 'flex' : 'none'} },
+						{ s: {display: this.data.user ? 'flex' : 'none'}, ch: [
+							{ ch: [
+								{ s: {'background-image': `url(${this.data.d ? this.data.d.photoURL : ''})`}},
+								{ s: {display: !this.data.edit ? 'none': 'block'}}
+							]},
+							{ s: {display: this.data.edit ? 'none': 'block'}, txt: this.data.d ? this.data.d.displayName : '' },
+							{ s: {display: !this.data.edit ? 'none': 'block'}, d: {t: 'edit', i:0} },
+							{ ch: this.data.d ? this.data.d.tags.map(a => ({t:'span', txt: a})) : ([]), s: {display: this.data.d && this.data.d.tags.length > 0 ? 'block' : 'none'} },
+							{ s: {display: this.data.edit ? 'none': 'block'}, txt: this.data.d ? this.data.d.about : '' },
+							{ s: {display: !this.data.edit ? 'none': 'block'}, txt: this.data.d ? this.data.d.about : '', d: {t: 'edit', i:1} },
+							{ s: {display: this.data.edit ? 'none': 'block'}, ch: [ { txt: this.data.d ? (this.data.d.uid == this.data.user.uid ? 'Edit' : 'Message') : ''} ], e: [['onclick', a => {
+								if((a = new icApp.e(a.target).txt) == 'Edit') this.update({edit: true})
+								gtag('event', 'edit_ac_' + a.toLowerCase())
+								if(a != 'Edit') location = location.origin + '/?ac=message'
+							}]]},
+							{ s: {display: this.data.edit ? 'none': 'block'}, ch: [ { txt: this.data.d ? (this.data.d.uid == this.data.user.uid ? 'Logout' : 'Your Profile') : '' }], e: [['onclick', a => {
+								if((a = new icApp.e(a.target).txt) == 'Logout') firebase.auth().signOut()
+								gtag('event', 'edit_ac_' + a.toLowerCase())
+								location = location.origin + (a == 'Logout' ? '/signin.html' : '/profile.html')
+							}]]},
+							{ s: {display: !this.data.edit ? 'none': 'block'}, ch: [
+								{ e: [['onclick', a => this.update({edit: false})]]},
+								{ }
+							]}
+						]},
 						{ s: {display: !this.data.user ? 'flex' : 'none'} }
 					]}
 				]}
