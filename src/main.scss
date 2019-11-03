@@ -7,8 +7,8 @@ body, a, span, p, textarea {
 body, html {
   margin: 0;
   padding: 0;
-  width: 100%;
-  height: 100%;
+  min-width: 100%;
+  min-height: 100vh;
 }
 * {
   -webkit-backface-visibility: hidden;
@@ -18,9 +18,9 @@ body, html {
   display: flex;
   flex-direction: column;
   width: 100%;
-  height: 100%;
+  min-height: 100%;
   margin: 0 auto;
-  background-color: rgb(224, 224, 224);
+  background-color: #fff;
   position: relative;
 }
 .ic-btn0 {
@@ -28,7 +28,6 @@ body, html {
   margin: 4px 2px;
   font-size: 14px;
   box-shadow: 0 0 4px #0006;
-  color: #fff;
   background-color: col(light-4);
   text-decoration: none;
   box-sizing: border-box;
@@ -36,6 +35,9 @@ body, html {
   border-radius: 4px;
   text-align: center;
   border: 0;
+  &, & > * {
+    color: #fff;
+  }
   &:active:not(.dis) {
     transition-duration: $default-transition;
     background-color: col(light-8);
@@ -47,12 +49,11 @@ body, html {
 }
 .ICApp {
   width: 100%;
-  height: 100%;
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
   background-color: #fff;
   position: relative;
-  overflow-y: auto;
 }
 span {
   &.c01 {
@@ -71,6 +72,11 @@ span {
   z-index: 2;
   flex-shrink: 0;
   flex-grow: 0;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  box-sizing: border-box;
   > div, label {
     &, div {
       height: 100%;
@@ -165,12 +171,12 @@ span {
 }
 .main {
   width: 100%;
-  height: 100%;
   z-index: 1;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  overflow-y: auto;
+  padding-top: 52px;
+  min-height: calc(100vh - 52px);
   .load {
     width: 100%;
     min-height: 100%;
@@ -178,7 +184,6 @@ span {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    overflow-y: auto;
     div {
       display: block;
       width: 160px;
@@ -193,9 +198,40 @@ span {
     }
   }
   .cont {
-    overflow-y: auto;
     > * {
       margin: 0 auto;
     }
+  }
+}
+.signin-c {
+  flex-direction: column;
+  padding: 28px 0;
+  span {
+    display: block;
+    text-align: center;
+    width: 80%;
+    max-width: 400px;
+    margin: 0 auto;
+    &.c1 {
+      font-size: 23px;
+    }
+  }
+  div {
+    display: block;
+    &.ico {
+      width: 100%;
+      margin: 20px auto;
+      max-width: 200px;
+    }
+  }
+  svg {
+    width: 60%;
+    color: col(light-5);
+  }
+  .ic-btn0 {
+    display: block;
+    margin: 10px auto;
+    width: 80%;
+    max-width: 400px;
   }
 }
