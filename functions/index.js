@@ -34,6 +34,9 @@ const sysErr = (a, b) => {
 	JInit(a)
 	a.send(Send(b ? b : ['Failed to response', 'undefined system error', 'Internal Server Error'], false))
 }
+exports.createUserDB = functions.auth.user().onCreate(async u => {
+	var a = await db.collection('users').doc(u.uid).set({uid: u.uid, about: '', tags: []})
+});
 exports.getUser = functions.https.onRequest(async (req, res) => {
 	var q = queryC(req, res, 'uid')
 	if(q === false) return
@@ -43,6 +46,21 @@ exports.getUser = functions.https.onRequest(async (req, res) => {
 	}
 	catch(e) {
 		if(e.code === 'auth/user-not-found') return sysErr(res, ['User not found'])
+		console.error(e)
+		return sysErr(res)
+	}
+})
+exports.getFullUser = functions.https.onRequest(async (req, res) => {
+	var q = queryC(req, res, 'uid')
+	if(q === false) return
+	try {
+		var a = await admin.auth().getUser(q[0])
+		var b = await db.collection('users').doc(q[0]).get()
+	  res.send(Send(Object.assign(sendJ(a, 'uid', 'displayName', 'photoURL'), sendJ(b.data(), 'about', 'tags'))))
+	}
+	catch(e) {
+		if(e.code === 'auth/user-not-found') return sysErr(res, ['User not found'])
+		console.error(e)
 		return sysErr(res)
 	}
 })
