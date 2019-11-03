@@ -11,7 +11,6 @@ window.ic = window.ic || []
 window.ic.pageLoad = Date.now()
 document.addEventListener('DOMContentLoaded', () => {
 let icApp = ic.icApp
-firebase.performance()
 var _root_ = new icApp.e('#root')
 Theme.set('red')
 
