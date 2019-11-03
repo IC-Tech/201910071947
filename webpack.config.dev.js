@@ -57,6 +57,13 @@ module.exports = merge(common, {
       filename: 'signin.html',
       chunks: ['signin', 'vendor'],
       favicon: './src/public/favicon.ico'
+    }),
+    new HtmlWebpackPlugin({
+      title: 'Profile',
+      template: './src/profile.html',
+      filename: 'profile.html',
+      chunks: ['profile', 'vendor'],
+      favicon: './src/public/favicon.ico'
     })
   ],
   devServer: {

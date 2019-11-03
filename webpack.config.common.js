@@ -8,7 +8,8 @@ const outputDirectory = 'public';
 module.exports = {
   entry: {
     'ichat': './src/index.js',
-    'signin': './src/signin.js'
+    'signin': './src/signin.js',
+    'profile': './src/profile.js'
   },
   output: {
     path: path.join(__dirname, outputDirectory),
