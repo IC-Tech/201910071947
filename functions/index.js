@@ -1,16 +1,16 @@
 const functions = require('firebase-functions');
-const nodemailer = require('nodemailer');
 const admin = require('firebase-admin');
 const serviceAccount = require("./serviceAccountKey.json");
 var app = admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
   databaseURL: "https://ichat-ictech.firebaseio.com"
 });
+const db = admin.firestore()
 
 //console.log("IChat Functions Start => ", new Date().toString())
 const sendJ = (a,...b) => {
 	var c = {}
-	b.forEach(b => a[b] ? (c[b] = a[b]) : 0)
+	b.forEach(b => typeof a[b] !== undefined ? (c[b] = a[b]) : 0)
 	return c
 }
 const Send = (a, b = true) => JSON.stringify({response: a, success: b})
