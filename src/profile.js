@@ -60,35 +60,42 @@ class IChat extends IAR {
 	}
 	didUpdate() {
 		var a = icApp.ds({t: 'edit', i:0})
-		if(this.data.d && a.val != this.data.d.displayName) a.val = this.data.d.displayName
-		a = icApp.ds({t: 'edit', i:1})
-		if(this.data.d && a.txt != this.data.d.about) a.txt = this.data.d.about
+		if(!this.data.edit && this.data.d && a.val != this.data.d.displayName) a.val = this.data.d.displayName
 	}
 	save(a) {
-		a = [icApp.ds({t: 'edit', i:0}).val, icApp.ds({t: 'edit', i:1}).txt, this.image, {}]
+		this.update({UI:0})
+		a = [icApp.ds({t: 'edit', i:0}).val, icApp.ds({t: 'edit', i:1}).html.replace(/<br\/?>/gim, '\n'), this.image, {}]
 		var b = firebase.auth().currentUser
 		if(b.displayName != a[0]) a[3].displayName = a[0]
-		if(a[2]) {}
 		var _a = () => {
 			if(Object.keys(a[3]).length > 0) {
 				b.updateProfile(a[3]).then(a => {
 					a = firebase.auth().currentUser
 					this.data.d.displayName = a.displayName
 					this.data.d.photoURL = a.photoURL
-					this.update({edit:false})
+					this.update({UI: 1, edit:false})
 					gtag('event', 'edit_done_t1')
 				}).catch(a => console.log('error',a))
 			}
-			else this.update({edit:false})
+			else this.update({UI: 1, edit:false})
 		}
-		if(a[1] != this.data.d.about) {
-			var c = firebase.firestore().collection('users').doc(b.uid).update({about: a[1]}).then(a=> {
-				gtag('event', 'edit_done_t2')
-				_a()
-			})
-			this.data.d.about = a[1]
+		var _b = () => {
+			if(a[1] != this.data.d.about) {
+				var c = firebase.firestore().collection('users').doc(b.uid).update({about: a[1]}).then(a=> {
+					gtag('event', 'edit_done_t2')
+					_a()
+				})
+				this.data.d.about = a[1]
+			}
+			else _a()
 		}
-		else _a()
+		if(a[2]) {
+			firebase.storage().ref().child(`users/${b.uid}/images/${icApp.qs('input[type="file"]').files[0].name}`).put(this.image).then(c => c.ref.getDownloadURL().then(c => {
+				a[3].photoURL = c
+				_b()
+			}))
+		}
+		else _b()
 	}
 	render() {
 		return ([
@@ -127,7 +134,7 @@ class IChat extends IAR {
 							{ s: {display: !this.data.edit ? 'none': 'block'}, d: {t: 'edit', i:0} },
 							{ ch: this.data.d ? this.data.d.tags.map(a => ({t:'span', txt: a})) : ([]), s: {display: this.data.d && this.data.d.tags.length > 0 ? 'block' : 'none'} },
 							{ s: {display: this.data.edit ? 'none': 'block'}, txt: this.data.d ? this.data.d.about : '' },
-							{ s: {display: !this.data.edit ? 'none': 'block'}, txt: this.data.d ? this.data.d.about : '', d: {t: 'edit', i:1} },
+							{ s: {display: !this.data.edit ? 'none': 'block'}, txt: !this.data.edit && this.data.d ? this.data.d.about : null, d: {t: 'edit', i:1} },
 							{ s: {display: this.data.edit ? 'none': 'block'}, ch: [ { txt: this.data.d ? (this.data.d.uid == this.data.user.uid ? 'Edit' : 'Message') : ''} ], e: [['onclick', a => {
 								if((a = new icApp.e(a.target).txt) == 'Edit') this.update({edit: true})
 								gtag('event', 'edit_ac_' + a.toLowerCase())
