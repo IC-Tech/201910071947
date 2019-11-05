@@ -36,18 +36,21 @@ class IChat extends IAR {
 			if(!user) return
 			this.analytics.setUserId(user.uid)
 			var a = pram('tid')
-			if(!a) {
-				a = this.data.user.uid
-				var b = new URL(location.href)
-				b.searchParams.set('tid', a)
-				history.pushState({IC_Nav: true}, icApp.qs('title').txt, b.href)
-			}
+			a = this.data.user.uid
+			var b = new URL(location.href)
+			b.searchParams.set('tid', a)
+			if(!a) history.pushState({IC_Nav: true}, icApp.qs('title').txt, b.href)
 			XHR(this.functions + 'getFullUser?uid=' + a, a => {
 				if(!a || !a.success) {
 					console.log(a)
 					return
 				}
-				this.update({UI: 1, d: a.response})
+				new icApp.e('title').txt = (a = a.response).displayName + ' | IChat'
+				icApp.ds('meta[property="og:url"]').content = b.href
+				icApp.ds('meta[property="og:title"]').content = a.displayName + ' | IChat'
+				icApp.ds('meta[property="og:image"]').content = a.photoURL
+				icApp.ds('meta[property="og:description"]').content = a.displayName + '\'s IChat Profile'
+				this.update({UI: 1, d: a})
 			})
 		})
 		document.addEventListener('click', a => {
