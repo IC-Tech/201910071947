@@ -23,6 +23,7 @@ class IChat extends IAR {
 			d: null,
 			edit: false
 		}
+		this.save = this.save.bind(this)
 		this.analytics = firebase.analytics()
 		this.performance = firebase.performance()
 		var a = firebase.app().options
@@ -61,7 +62,33 @@ class IChat extends IAR {
 		var a = icApp.ds({t: 'edit', i:0})
 		if(this.data.d && a.val != this.data.d.displayName) a.val = this.data.d.displayName
 		a = icApp.ds({t: 'edit', i:1})
-		if(this.data.d && a.val != this.data.d.about) a.val = this.data.d.about
+		if(this.data.d && a.txt != this.data.d.about) a.txt = this.data.d.about
+	}
+	save(a) {
+		a = [icApp.ds({t: 'edit', i:0}).val, icApp.ds({t: 'edit', i:1}).txt, this.image, {}]
+		var b = firebase.auth().currentUser
+		if(b.displayName != a[0]) a[3].displayName = a[0]
+		if(a[2]) {}
+		var _a = () => {
+			if(Object.keys(a[3]).length > 0) {
+				b.updateProfile(a[3]).then(a => {
+					a = firebase.auth().currentUser
+					this.data.d.displayName = a.displayName
+					this.data.d.photoURL = a.photoURL
+					this.update({edit:false})
+					gtag('event', 'edit_done_t1')
+				}).catch(a => console.log('error',a))
+			}
+			else this.update({edit:false})
+		}
+		if(a[1] != this.data.d.about) {
+			var c = firebase.firestore().collection('users').doc(b.uid).update({about: a[1]}).then(a=> {
+				gtag('event', 'edit_done_t2')
+				_a()
+			})
+			this.data.d.about = a[1]
+		}
+		else _a()
 	}
 	render() {
 		return ([
@@ -83,8 +110,18 @@ class IChat extends IAR {
 					{ s: {display: this.data.UI == 1 ? 'flex' : 'none'}, ch: [
 						{ s: {display: this.data.user ? 'flex' : 'none'}, ch: [
 							{ ch: [
-								{ s: {'background-image': `url(${this.data.d ? this.data.d.photoURL : ''})`}},
-								{ s: {display: !this.data.edit ? 'none': 'block'}}
+								{ d: {t:'img', i:0}, s: {'background-image': `url(${this.data.d ? this.data.d.photoURL : ''})`}},
+								{ s: {display: !this.data.edit ? 'none': 'block'}, ch: [
+									{ e: [['oninput', e => {
+										var t = e.target.files[0]
+										if(!FileReader) return
+										var f = new FileReader()
+										f.onload = e => icApp.ds({t:'img', i:0}).st.backgroundImage = `url(${URL.createObjectURL(this.image = new Blob([e.target.result], {type: t.type}))})`
+										f.readAsArrayBuffer(t)
+									}
+									]]},
+									{}
+								]}
 							]},
 							{ s: {display: this.data.edit ? 'none': 'block'}, txt: this.data.d ? this.data.d.displayName : '' },
 							{ s: {display: !this.data.edit ? 'none': 'block'}, d: {t: 'edit', i:0} },
@@ -103,7 +140,7 @@ class IChat extends IAR {
 							}]]},
 							{ s: {display: !this.data.edit ? 'none': 'block'}, ch: [
 								{ e: [['onclick', a => this.update({edit: false})]]},
-								{ }
+								{ e: [['onclick', this.save]]}
 							]}
 						]},
 						{ s: {display: !this.data.user ? 'flex' : 'none'} }
