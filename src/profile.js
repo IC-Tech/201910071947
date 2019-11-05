@@ -90,10 +90,11 @@ class IChat extends IAR {
 			else _a()
 		}
 		if(a[2]) {
-			firebase.storage().ref().child(`users/${b.uid}/images/${icApp.qs('input[type="file"]').files[0].name}`).put(this.image).then(c => c.ref.getDownloadURL().then(c => {
+			var c = icApp.qs('input[type="file"]').files[0]
+			firebase.storage().ref().child(`users/${b.uid}/images/pp/${c.name}`).put(this.image, {contentType: c.type, customMetadata: {u:b.uid, c: Date.now(), lastModified: c.lastModified, source: 'profile.js'}}).then(c => c.ref.getDownloadURL().then(c => {
 				a[3].photoURL = c
 				_b()
-			}))
+			})).catch(e => console.log('error', e))
 		}
 		else _b()
 	}
