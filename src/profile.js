@@ -36,20 +36,20 @@ class IChat extends IAR {
 			if(!user) return
 			this.analytics.setUserId(user.uid)
 			var a = pram('tid')
-			a = this.data.user.uid
+			var _a = !a
 			var b = new URL(location.href)
-			b.searchParams.set('tid', a)
-			if(!a) history.pushState({IC_Nav: true}, icApp.qs('title').txt, b.href)
+			b.searchParams.set('tid', a = a ? a : this.data.user.uid)
+			if(_a) history.pushState({IC_Nav: true}, icApp.qs('title').txt, b.href)
 			XHR(this.functions + 'getFullUser?uid=' + a, a => {
 				if(!a || !a.success) {
 					console.log(a)
 					return
 				}
 				new icApp.e('title').txt = (a = a.response).displayName + ' | IChat'
-				icApp.ds('meta[property="og:url"]').content = b.href
-				icApp.ds('meta[property="og:title"]').content = a.displayName + ' | IChat'
-				icApp.ds('meta[property="og:image"]').content = a.photoURL
-				icApp.ds('meta[property="og:description"]').content = a.displayName + '\'s IChat Profile'
+				icApp.qs('meta[property="og:url"]').content = b.href
+				icApp.qs('meta[property="og:title"]').content = a.displayName + ' | IChat'
+				icApp.qs('meta[property="og:image"]').content = a.photoURL
+				icApp.qs('meta[property="og:description"]').content = a.displayName + '\'s IChat Profile'
 				this.update({UI: 1, d: a})
 			})
 		})
