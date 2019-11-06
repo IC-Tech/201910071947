@@ -24,14 +24,18 @@ class IChat extends IAR {
 		this.data = {
 			UI: 0,
 			UI2: 0,
-			ready: false
+			ready: false,
+			profileD: null,
+			showProfile: false
 		}
 		this.send = this.send.bind(this)
+		this.closeProfile = this.closeProfile.bind(this)
 		var a = firebase.app().options
 		this.analytics = firebase.analytics()
 		this.performance = firebase.performance()
 		this.functions = IC_DEV ? `http://192.168.8.20:5001/${a.projectId}/${a.locationId}1/` : `https://us-central1-${a.projectId}.cloudfunctions.net/`
 		this.users = JSON.parse(localStorage.getItem('IC-Tech.IChat:Users'))
+		this.usersV = JSON.parse(localStorage.getItem('IC-Tech.IChat:UsersV'))
 		if(!this.users) this.users = {}
 		this.user = ''
 		this.userInit = a => {
@@ -50,8 +54,13 @@ class IChat extends IAR {
 			return this.users
 		}
 		this.messages = []
+		this.showProfile = a => {
+			a = new icApp.e(a.target)
+			if(a.d.t != 'msg-p') return
+			this.update({profileD: this.users[a.d.u], showProfile: true})
+		}
 		this.mc = a => ([this.userInit(a.u),({t:'div', cl: ['ms', this.user == a.u ? 'm2': 'm1'], ch: /*this.user == a.u ? [this.mc.a(a)] :*/ [
-			{t:'div', at:[['title', this.users[a.u].name]], s: {'background-image': this.users[a.u].image ? `url("${this.users[a.u].image}")` : '' }},
+			{t:'div', at:[['title', this.users[a.u].name]], s: {'background-image': this.users[a.u].image ? `url("${this.users[a.u].image}")` : '' }, d: {t:'msg-p', u: a.u}, e: [['onclick', this.showProfile]]},
 			this.mc.a(a)
 		]})])[1]
 		this.mc.a = a => ({t:'div', cl: 'con', ch: [
@@ -113,6 +122,9 @@ class IChat extends IAR {
 	close() {
 		window.close()
 	}
+	closeProfile(a) {
+		this.update({showProfile: !new icApp.e(a.target).clc('profile-d')})
+	}
 	render() {
 		return ([
 			{ s: {display: this.data.ready ? 'flex' : 'none'}, ch: [
@@ -151,7 +163,16 @@ class IChat extends IAR {
 					]}
 				]}
 			]},
-			{ s: {display: !this.data.ready ? 'flex' : 'none'} }
+			{ s: {display: !this.data.ready ? 'flex' : 'none'} }, 
+			{ s: {display: this.data.ready && this.data.showProfile ? 'block' : 'none'}, ch: [
+				{t: 'div', cl: 'profile-d', e: [['onclick', this.closeProfile]], ch: [
+					{t: 'div', d: {t:'pd', u: this.data.profileD ? this.data.profileD.uid : ''}, ch: [
+						{t: 'div', cl: 'a', s: {'background-image': this.data.profileD ? `url(${this.data.profileD.image})` : ''}},
+						{t: 'span', txt: this.data.profileD ? this.data.profileD.name : ''},
+						{t:'a', txt: 'View', at: [['href', '/profile.html?tid=' + (this.data.profileD ? this.data.profileD.uid : '')]]}
+					]}
+				]}
+			]}
 		])
 	}
 }

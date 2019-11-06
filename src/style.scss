@@ -147,3 +147,53 @@
 		}
 	}
 }
+#profiles {
+	z-index: 2;
+	.profile-d {
+		display: flex;
+		position: absolute;
+		left: 0;
+		right: 0;
+		top: 0;
+		bottom: 0;
+		background-color: #0009;
+		flex-direction: column;
+		justify-content: center;
+		> div {
+			min-height: 10px;
+			background-color: #fff;
+			box-shadow: 0 0 10px #0006;
+			padding: 10px 20px;
+			border-radius: 16px;
+			&, > * {
+				display: block;
+				margin: 10px auto;
+				text-align: center;
+			}
+		}
+		.a {
+			width: 30vw;
+			height: 30vw;
+			background-position: center top;
+			background-size: cover;
+			border-radius: 50%;
+			background-image: url('/images/avatar/default.png');
+		}
+		span {
+			font-size: 19px;
+			max-width: 80vw;
+			word-wrap: break-word;
+			max-height: 60vh;
+			overflow-y: auto;
+		}
+		a {
+			margin: 0 auto 10px;
+			text-decoration: none;
+			display: inline-block;
+			background-color: col(light-6);
+			padding: 6px 12px;
+			color: #fff;
+			border-radius: 18px;
+		}
+	}
+}
