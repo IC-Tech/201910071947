@@ -121,13 +121,13 @@ class IChat extends IAR {
 					{ s: {display: this.data.UI == 1 ? 'flex' : 'none'}, ch: [
 						{ s: {display: this.data.user ? 'flex' : 'none'}, ch: [
 							{ ch: [
-								{ d: {t:'img', i:0}, s: {'background-image': `url(${this.data.d ? this.data.d.photoURL : ''})`}},
+								{ d: {t:'img', i:0}, s: {'background-image': `url("${this.data.d ? this.data.d.photoURL : ''}"), url("/images/avatar/default.gif")`}},
 								{ s: {display: !this.data.edit ? 'none': 'block'}, ch: [
 									{ e: [['oninput', e => {
 										var t = e.target.files[0]
 										if(!FileReader) return
 										var f = new FileReader()
-										f.onload = e => icApp.ds({t:'img', i:0}).st.backgroundImage = `url(${URL.createObjectURL(this.image = new Blob([e.target.result], {type: t.type}))})`
+										f.onload = e => icApp.ds({t:'img', i:0}).st.backgroundImage = `url("/images/avatar/default.gif"), url(${URL.createObjectURL(this.image = new Blob([e.target.result], {type: t.type}))})`
 										f.readAsArrayBuffer(t)
 									}
 									]]},
