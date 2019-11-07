@@ -127,7 +127,7 @@ class IChat extends IAR {
 										var t = e.target.files[0]
 										if(!FileReader) return
 										var f = new FileReader()
-										f.onload = e => icApp.ds({t:'img', i:0}).st.backgroundImage = `url("/images/avatar/default.gif"), url(${URL.createObjectURL(this.image = new Blob([e.target.result], {type: t.type}))})`
+										f.onload = e => icApp.ds({t:'img', i:0}).st.backgroundImage = `url(${URL.createObjectURL(this.image = new Blob([e.target.result], {type: t.type}))})`
 										f.readAsArrayBuffer(t)
 									}
 									]]},
