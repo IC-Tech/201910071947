@@ -102,6 +102,7 @@
 					border-radius: 6px;
 					font-size: 14px;
 					max-width: 68%;
+					word-wrap: break-word;
 				}
 				&:nth-child(2) {
 					display: block;
@@ -120,7 +121,7 @@
 					width: 34px;
 					height: 34px;
 					background-size: cover;
-					background-image: url('/images/avatar/default.png');
+					background-image: url('/images/avatar/default.gif');
 					background-position: top center;
 					border: 2px solid col(light-9);
 					border-radius: 50%;
@@ -177,7 +178,7 @@
 			background-position: center top;
 			background-size: cover;
 			border-radius: 50%;
-			background-image: url('/images/avatar/default.png');
+			background-image: url('/images/avatar/default.gif');
 		}
 		span {
 			font-size: 19px;
