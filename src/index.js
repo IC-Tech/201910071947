@@ -54,10 +54,10 @@ class IChat extends IAR {
 		this.showProfile = a => {
 			a = new icApp.e(a.target)
 			if(a.d.t != 'msg-p') return
-			this.update({profileD: this.users[a.d.u], showProfile: true})
+			this.update({profileD: a.d.u, showProfile: true})
 		}
 		this.mc = a => ([this.userInit(a.u),({t:'div', cl: ['ms', this.user == a.u ? 'm2': 'm1'], ch: /*this.user == a.u ? [this.mc.a(a)] :*/ [
-			{t:'div', at:[['title', this.users[a.u].name]], s: {'background-image': this.users[a.u].image ? `url("${this.users[a.u].image}")` : '' }, d: {t:'msg-p', u: a.u}, e: [['onclick', this.showProfile]]},
+			{t:'div', at:[['title', this.users[a.u].name]], s: {'background-image': `url("${ this.users[a.u].image ? this.users[a.u].image : ''}"), url("/images/avatar/default.gif")` }, d: {t:'msg-p', u: a.u}, e: [['onclick', this.showProfile]]},
 			this.mc.a(a)
 		]})])[1]
 		this.mc.a = a => ({t:'div', cl: 'con', ch: [
@@ -163,10 +163,10 @@ class IChat extends IAR {
 			{ s: {display: !this.data.ready ? 'flex' : 'none'} }, 
 			{ s: {display: this.data.ready && this.data.showProfile ? 'block' : 'none'}, ch: [
 				{t: 'div', cl: 'profile-d', e: [['onclick', this.closeProfile]], ch: [
-					{t: 'div', d: {t:'pd', u: this.data.profileD ? this.data.profileD.uid : ''}, ch: [
-						{t: 'div', cl: 'a', s: {'background-image': this.data.profileD ? `url(${this.data.profileD.image})` : ''}},
-						{t: 'span', txt: this.data.profileD ? this.data.profileD.name : ''},
-						{t:'a', txt: 'View', at: [['href', '/profile.html?tid=' + (this.data.profileD ? this.data.profileD.uid : '')]]}
+					{t: 'div', d: {t:'pd', u: this.data.profileD ? this.data.profileD : ''}, ch: [
+						{t: 'div', cl: 'a', s: {'background-image': `url("${ this.data.profileD ? this.users[this.data.profileD].image : ''}"), url("/images/avatar/default.gif")`}},
+						{t: 'span', txt: this.data.profileD ? this.users[this.data.profileD].name : ''},
+						{t:'a', txt: 'View', at: [['href', '/profile.html?tid=' + (this.data.profileD ? this.data.profileD : '')]]}
 					]}
 				]}
 			]}
