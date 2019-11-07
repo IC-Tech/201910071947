@@ -34,8 +34,7 @@ class IChat extends IAR {
 		this.analytics = firebase.analytics()
 		this.performance = firebase.performance()
 		this.functions = IC_DEV ? `http://192.168.8.20:5001/${a.projectId}/${a.locationId}1/` : `https://us-central1-${a.projectId}.cloudfunctions.net/`
-		this.users = JSON.parse(localStorage.getItem('IC-Tech.IChat:Users'))
-		this.usersV = JSON.parse(localStorage.getItem('IC-Tech.IChat:UsersV'))
+		this.users = []
 		if(!this.users) this.users = {}
 		this.user = ''
 		this.userInit = a => {
@@ -46,8 +45,6 @@ class IChat extends IAR {
 						return
 					}
 					this.users[(a = a.response).uid] = {uid: a.uid, name: a.displayName, image: a.photoURL}
-					this.users[a.uid].a = true
-					localStorage.setItem('IC-Tech.IChat:Users', JSON.stringify(this.users))
 					this.update()
 				})
 			}
