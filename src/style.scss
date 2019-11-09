@@ -78,7 +78,8 @@
 				padding: 4px 8px;
 				margin: 10px 10px 10px;
 				border-radius: 14px;
-				border: 1px solid #eee;
+				border: 1px solid #555;
+				outline: none;
 				&:focus {
 					border: 1px solid col(light-5);
 				}
@@ -93,6 +94,7 @@
 				background-color: col(light-5);
 				color: #fff;
 				border: 1px solid col(light-5) !important;
+				outline: none;
 				&:active {
 					color: col(light-5);
 					background-color: #fff;
