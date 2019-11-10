@@ -60,10 +60,24 @@ class IChat extends IAR {
 			{t:'div', at:[['title', this.users[a.u].name]], s: {'background-image': `url("${ this.users[a.u].image ? this.users[a.u].image : ''}"), url("/images/avatar/default.gif")` }, d: {t:'msg-p', u: a.u}, e: [['onclick', this.showProfile]]},
 			this.mc.a(a)
 		]})])[1]
-		this.mc.a = a => ({t:'div', cl: 'con', ch: [
-				{t: 'span', txt: a.m },
+		this.mc.a = a => {
+			var f = a.m
+			var b = /(?:https?:\/\/(?:www\.)?)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b(?:[-a-zA-Z0-9()@:%_\+.~#?&//=]*)/gi
+			var c = Array.from(f.matchAll(b))
+			var d = f.split(b)
+			if(c.length > 0) {
+				f = []
+				for(var e = 0; e<c.length; e++) {
+					f.push(d[e])
+					f.push({t:'a', at:[['href', c[e][0]]], txt: c[e][0]})
+				}
+				f.push(d[d.length - 1])
+			}
+			return ({t:'div', cl: 'con', ch: [
+				Object.assign({t: 'span'}, typeof f == 'string' ? ({txt: f}) : ({nodes: 1, ch: f})),
 				{t: 'span', txt: new Date(a.t).toString() }
 			]})
+		}
 		this.mess = (a => {
 			window.ic.t = a
 			console.log(a.docChanges())
