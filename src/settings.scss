@@ -1,0 +1,72 @@
+/* Copyright © Imesh Chamara 2019 */
+@import 'main.scss';
+.settings {
+	display: flex;
+	flex-direction: column;
+	width: 80%;
+	max-width: 380px;
+	margin: 0 auto;
+	> * {
+		min-height: 0;
+		display: block;
+		margin: 8px auto;
+		text-align: center;
+		width: 100%;
+	}
+	> .a {
+		> span {
+			padding-right: 10px;
+		}
+	}
+	.sel {
+		display: inline-block;
+		&:before {
+			content: '';
+			display: block;
+			width: 4px;
+			height: 4px;
+			position: absolute;
+			margin: 8px 0 0 10px;
+			transform: rotate(45deg);
+			border: 3px solid #666;
+			border-left-color: #fff0;
+			border-top-color: #fff0;
+		}
+		* {
+			transition-duration: $default-transition;
+		}
+		input {
+			display: none;
+		}
+		input:checked ~ div {
+			display: block;
+		}
+		span {
+			display: block;
+			padding: 6px 12px;
+			text-align: center;
+		}
+		> * {
+			border: 1px solid #ddd;
+			border-radius: 8px;
+		}
+		> span {
+			padding-left: 26px;
+			box-shadow: 0 0 6px #0004;
+		}
+		div {
+			clip-path: inset(0 -20px -20px -20px);
+			position: absolute;
+			display: none;
+			box-shadow: 0 0 10px #0004;
+			span {
+				&:hover {
+					background-color: #eee;
+				}
+				&:active {
+					background-color: #ddd;
+				}
+			}
+		}
+	}
+}
