@@ -109,6 +109,16 @@ module.exports = merge(common, {
       minify: {
           collapseWhitespace: true
       }
+    }),
+    new HtmlWebpackPlugin({
+      title: 'Settings',
+      template: './src/settings.html',
+      filename: 'settings.html',
+      chunks: ['settings', 'vendor'],
+      favicon: './src/public/favicon.ico',
+      minify: {
+          collapseWhitespace: true
+      }
     })
     /*new CompressionPlugin()*/
   ],
