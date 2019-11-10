@@ -123,6 +123,10 @@
 					display: block;
 					font-size: 10px;
 				}
+				a {
+					color: col(light-6);
+					text-decoration: none;
+				}
 			}
 		}
 		.m1 {
@@ -181,6 +185,7 @@
 			box-shadow: 0 0 10px #0006;
 			padding: 10px 20px;
 			border-radius: 16px;
+			overflow-y: auto;
 			&, > * {
 				display: block;
 				margin: 10px auto;
@@ -190,6 +195,8 @@
 		.a {
 			width: 30vw;
 			height: 30vw;
+			max-width: 280px;
+			max-height: 280px;
 			background-position: center top;
 			background-size: cover;
 			border-radius: 50%;
