@@ -18,6 +18,7 @@ const icApp = {
 		constructor(v){ this.v = typeof v == 'string' ? icApp.qs(v) : v; return v == null || v == undefined ? v : this }
 		get cl() { return this.v.classList }
 		get ch() { return this.v.children }
+		get chn() { return this.v.childNodes }
 		cha(v) { this.v.appendChild(v); return this }
 		ap(v) { this.v.appendChild(v); return this }
 		// eslint-disable-next-line no-unused-vars
