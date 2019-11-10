@@ -66,8 +66,8 @@ class IChat extends IAR {
 		if(!this.data.edit && this.data.d && a.val != this.data.d.displayName) a.val = this.data.d.displayName
 	}
 	save(a) {
+		a = [icApp.ds({t: 'edit', i:0}).val, icApp.ds({t: 'edit', i:1}).txt, this.image, {}]
 		this.update({UI:0})
-		a = [icApp.ds({t: 'edit', i:0}).val, icApp.ds({t: 'edit', i:1}).html.replace(/<br\/?>/gim, '\n'), this.image, {}]
 		var b = firebase.auth().currentUser
 		if(b.displayName != a[0]) a[3].displayName = a[0]
 		var _a = () => {
