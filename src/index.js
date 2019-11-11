@@ -141,10 +141,7 @@ class IChat extends IAR {
 		return ([
 			{ s: {display: this.data.ready ? 'flex' : 'none'}, ch: [
 				{ ch: [
-					{ ch: [
-						{ e: [['onclick', a=> (a = location) == a.origin || a == a.origin + '/' ? 0 : (location = a.origin)]]},
-						{}
-					]},
+					{ e: [['onclick', a=> (a = location) == a.origin || a == a.origin + '/' ? 0 : (location = a.origin)]] },
 					{ ch: [
 						{}, {},
 						{ ch: [
