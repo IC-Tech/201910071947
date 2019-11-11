@@ -10,7 +10,8 @@ module.exports = {
     'ichat': './src/index.js',
     'signin': './src/signin.js',
     'profile': './src/profile.js',
-    'settings': './src/settings.js'
+    'settings': './src/settings.js',
+    'about': './src/about.js'
   },
   output: {
     path: path.join(__dirname, outputDirectory),
