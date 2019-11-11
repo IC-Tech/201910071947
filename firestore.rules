@@ -12,5 +12,9 @@ service cloud.firestore {
       allow read, update, delete: if request.auth.uid == userId;
       allow create: if request.auth.uid != null;
     }
+    match /fcmTokens/{token} {
+      allow read: if false;
+      allow write;
+    }
   }
 }
