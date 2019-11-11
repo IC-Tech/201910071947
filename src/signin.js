@@ -34,18 +34,20 @@ class IChat extends IAR {
 		firebase.auth().onAuthStateChanged(user => {
 			this.update({user, UI: 1})
 			if(user) this.analytics.setUserId(user.uid)
+			if(!user && document.referrer) sessionStorage.setItem('referrer', document.referrer)
+			else if(!user) sessionStorage.removeItem('referrer')
 			gtag('event', 'screen_view', { 'screen_name': this.data.user ? 'signedUser' : 'sign'})
 		})
 		firebase.auth().getRedirectResult().then(a => {
+			const b = a => location = sessionStorage.getItem('referrer') ? sessionStorage.getItem('referrer') : location.origin
 			if (a.user) {
 				gtag('event', a.additionalUserInfo.isNewUser ? 'sign_up' : 'login', {
-					method : a.additionalUserInfo.providerId == 'google.com' ? 'Google' : 'Unknown',
-					'event_callback': a => {
-						location = location.origin
-				}})
+					method : a.additionalUserInfo.providerId == 'google.com' ? 'Google' : (a.additionalUserInfo.providerId == 'facebook.com' ? 'Facebook' : 'Unknown'),
+					'event_callback': a => b()
+				})
 				setTimeout(a => {
 					gtag('event', 'exception', {'description': 'gtag event_callback failed', 'fatal': false})
-					location = location.origin
+					b()
 				}, 4000)
 			}
 		})
