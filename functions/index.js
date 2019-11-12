@@ -64,3 +64,22 @@ exports.getFullUser = functions.https.onRequest(async (req, res) => {
 		return sysErr(res)
 	}
 })
+exports.sendNotifications = functions.firestore.document('messages/{messageId}').onCreate(async a => {
+	a = a.data()
+	var c = await admin.auth().getUser(a.uid)
+	const tokens = (await admin.firestore().collection('fcmTokens').get()).map(a => a.id)
+	if (tokens.length <= 0) return
+	const b = await admin.messaging().sendToDevice(tokens, {
+		title: `${c.displayName} posted a message`,
+		body: a.m ? (a.m.length <= 100 ? a.m : a.m.substring(0, 97) + '...') : '',
+    icon: c.photoURL || '/images/avatar/default.png',
+    click_action: `https://${process.env.GCLOUD_PROJECT}.web.app`
+	})
+	c = []
+	b.results.forEach((b, a) => {
+		var e = b.error
+    if (e && e.code === 'messaging/invalid-registration-token' || e.code === 'messaging/registration-token-not-registered')
+    	c.push(admin.firestore().collection('messages').doc(tokens[a]).delete())
+   })
+	await Promise.all(c)
+})
