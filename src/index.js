@@ -14,6 +14,25 @@ let icApp = ic.icApp
 var _root_ = new icApp.e('#root')
 Theme.set('red')
 
+if ("serviceWorker" in navigator && !navigator.serviceWorker.controller) {
+  navigator.serviceWorker.register("firebase-messaging-sw.js").then(reg => {
+  	firebase.messaging().useServiceWorker(reg)
+  }).catch(e => {
+    console.log('SW Registration failed with ' + e);
+  })
+}
+
+new Promise((resolve, reject) => {
+  const b = Notification.requestPermission(a => resolve(a))
+  if (b) {
+    b.then(resolve, reject);
+  }
+}).then(a => {
+  if (a !== 'granted') {
+    throw new Error('We weren\'t granted permission.');
+  }
+})
+
 const defaultWait = 1200
 const Project = '201910071947'
 const PublicName = 'IChat'
@@ -79,8 +98,6 @@ class IChat extends IAR {
 			]})
 		}
 		this.mess = (a => {
-			window.ic.t = a
-			console.log(a.docChanges())
 			a.docChanges().map(a => ({a: a.type == "added" ? 0 : (a.type == "modified" ? 1 : 2), i: (a = a.doc).id, d: a.data()})).forEach((a,b) => {
 				a.d.i = a.i
 				a.d.t = a.d.t ? a.d.t.toDate().getTime() : Date.now()
@@ -92,12 +109,26 @@ class IChat extends IAR {
 			})
 		}).bind(this)
 	}
+	saveFCM() {
+		firebase.messaging().getToken().then(a => {
+    	if (a) firebase.firestore().collection('fcmTokens').doc(a).set({uid: firebase.auth().currentUser.uid})
+    	else requestPermissions()
+	  }).catch(e => {
+	    console.error('Unable to get messaging token.', e);
+	  });
+	}
+	requestPermissions() {
+	  firebase.messaging().requestPermission().then(() => saveFCM()).catch(e => {
+	    console.error('Unable to get permission to notify.', error);
+	  })
+	}
 	start(user) {
 		if(!user || this.started) return
 		this.user = user.uid
 		this.analytics.setUserId(this.user)
 		this.firestore = firebase.firestore()
 		this.firestore.collection('messages').orderBy('t', 'asc').limit(20).onSnapshot(this.mess)
+		this.saveFCM()
 		this.started = true
 	}
 	didMount() {
