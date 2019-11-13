@@ -110,8 +110,7 @@ class IChat extends IAR {
 								{t: 'span', cl: ['ic-btn0', 'dis'], txt: 'Sign in with Twitter' },
 								{t: 'span', cl: 'ic-btn0', txt: 'Sign in with Github', e:[['onclick', a => this.GitSignin()]] },
 								{t: 'span', cl: 'ic-btn0', txt: 'Sign in with Yahoo', e:[['onclick', a => this.YSignin()]] },
-								{t: 'span', cl: 'ic-btn0', txt: 'Sign in with Facebook', e:[['onclick', a => this.FSignin()]] },
-								{t: 'span', cl: ['ic-btn0', 'dis'], txt: 'Sign in with Microsoft' }
+								{t: 'span', cl: 'ic-btn0', txt: 'Sign in with Facebook', e:[['onclick', a => this.FSignin()]] }
 							]}
 						]},
 						{ t: 'div', s: {display: this.data.user ? 'flex' : 'none'}, ch: [
