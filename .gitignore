@@ -8,3 +8,6 @@ functions/.runtimeconfig.json
 functions/serviceAccountKey.json
 .tmp/
 src/public/google*
+src/public/Bing*
+src/public/yandex*
+src/public/norton*
