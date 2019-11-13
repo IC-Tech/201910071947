@@ -52,7 +52,7 @@ class IChat extends IAR {
 		var a = firebase.app().options
 		this.analytics = firebase.analytics()
 		this.performance = firebase.performance()
-		this.functions = IC_DEV ? `http://192.168.8.20:5001/${a.projectId}/${a.locationId}1/` : `https://us-central1-${a.projectId}.cloudfunctions.net/`
+		this.functions = IC_DEV ? `http://localhost:5001/${a.projectId}/${a.locationId}1/` : `https://us-central1-${a.projectId}.cloudfunctions.net/`
 		this.users = []
 		if(!this.users) this.users = {}
 		this.user = ''

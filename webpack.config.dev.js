@@ -81,6 +81,6 @@ module.exports = merge(common, {
     })
   ],
   devServer: {
-    host: '192.168.8.20'
+    host: 'localhost'
   }
 });
