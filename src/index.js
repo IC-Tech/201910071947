@@ -20,6 +20,9 @@ if ("serviceWorker" in navigator && !navigator.serviceWorker.controller) {
   }).catch(e => {
     console.log('SW Registration failed with ' + e);
   })
+  navigator.serviceWorker.register("ichat-sw.js").catch(e => {
+    console.log('SW Registration failed with ' + e);
+  })
 }
 
 new Promise((resolve, reject) => {
@@ -88,7 +91,7 @@ class IChat extends IAR {
 				f = []
 				for(var e = 0; e<c.length; e++) {
 					f.push(d[e])
-					f.push({t:'a', at:[['href', c[e][0]]], txt: c[e][0]})
+					f.push({t:'a', at:[['href', c[e][0]], ['target', '_blank']], txt: c[e][0]})
 				}
 				f.push(d[d.length - 1])
 			}
