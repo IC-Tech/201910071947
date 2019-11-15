@@ -1,0 +1,44 @@
+/* Copyright © Imesh Chamara 2019 */
+@import 'main.scss';
+@import url('https://fonts.googleapis.com/css?family=Exo:500,700&display=swap');
+.about {
+	width: 80%;
+	max-width: 520px;
+	span {
+		font-family: Exo, Roboto, Helvetica,'Segoe UI Emoji', Arial, 'IC Noto Sans Sinhala', 'Segoe UI', sans-serif;
+		display: block;
+		text-align: center;
+		margin: 4px auto;
+		&.a {
+			font-size: 24px;
+			&:nth-child(1) {
+				font-size: 32px;
+				font-weight: 700;
+			}
+		}
+		&.b {
+			font-size: 16px;
+			margin-bottom: 26px;
+			a {
+				color: col(light-5);
+				text-decoration: none;
+			}
+		}
+	}
+	div.a {
+		display: flex;
+		flex-direction: row;
+		justify-content: center;
+		> * {
+			display: inline-block;
+			width: 100px;
+			height: 100px;
+			background-position: center;
+			background-size: 86%;
+			border: 3px solid col(light-5);
+			margin: 0 10px;
+			padding: 4px;
+			border-radius: 50%;
+		}
+	}
+}
