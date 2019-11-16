@@ -7,6 +7,7 @@ import {IC_DEV, XHR} from './common.js'
 import {dialogUI} from './dialog-ui.js'
 import './style.scss'
 import './dialog.scss'
+
 window.ic = window.ic || []
 window.ic.pageLoad = Date.now()
 document.addEventListener('DOMContentLoaded', () => {
@@ -146,7 +147,12 @@ class IChat extends IAR {
 			if(a.b == 0) icApp.ds({t: 'mb'}).v.checked = false
 		})
 		this.update({ready:true})
-		gtag('event', 'page_mount_end', {pageMount: Date.now() - window.ic.pageLoad})
+		;(['page_mount_end', 'Home Page Load']).forEach(a => gtag('event', a, {
+  		'name': 'pageMount',
+  		'value': Date.now() - window.ic.pageLoad,
+  		'event_category': 'timing',
+  		'event_label': 'IC App'
+		}))
 	}
 	send(a) {
 		if(!this.user) return
@@ -155,6 +161,10 @@ class IChat extends IAR {
 		if(a.value.length >= 800) return dialogUI.create({name: 'Can not send Message', msg: 'The message was rejected by the server because the message was to large. maximum limit is 800 characters.', but: ['OK'],f: a=>dialogUI.remove(a.i)})
 		a = ([a.value, a.value = '', a.focus()])[0]
 		if(!a) return
+		gtag('event', "Send Message", {
+  		'event_category': 'Message',
+  		'event_label': 'Send Message'
+		})
 		this.firestore.collection('messages').add({
 			m: a,
 			u: this.user,

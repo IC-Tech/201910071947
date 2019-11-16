@@ -5,6 +5,8 @@ import {IAR} from './icApp-render.js'
 import {IC_DEV, XHR, pram} from './common.js'
 import './settings.scss'
 
+window.ic = window.ic || []
+window.ic.pageLoad = Date.now()
 document.addEventListener('DOMContentLoaded', () => {
 let icApp = ic.icApp
 var _root_ = new icApp.e('#root')
@@ -42,6 +44,12 @@ class IChat extends IAR {
 			if(a.b == 0) icApp.ds({t: 'mb'}).v.checked = false
 		})
 		this.update({ready:true})
+		;(['page_mount_end', 'Settings Page Load']).forEach(a => gtag('event', a, {
+  		'name': 'pageMount',
+  		'value': Date.now() - window.ic.pageLoad,
+  		'event_category': 'timing',
+  		'event_label': 'IC App'
+		}))
 	}
 	didUpdate() {}
 	render() {

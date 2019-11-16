@@ -5,6 +5,8 @@ import {IAR} from './icApp-render.js'
 import {IC_DEV, XHR, pram} from './common.js'
 import './profile.scss'
 
+window.ic = window.ic || []
+window.ic.pageLoad = Date.now()
 document.addEventListener('DOMContentLoaded', () => {
 let icApp = ic.icApp
 var _root_ = new icApp.e('#root')
@@ -51,6 +53,18 @@ class IChat extends IAR {
 				icApp.qs('meta[property="og:image"]').content = a.photoURL
 				icApp.qs('meta[property="og:description"]').content = a.displayName + '\'s IChat Profile'
 				this.update({UI: 1, d: a})
+				gtag('event', 'Profile Page Load', {
+		  		'name': 'pageMount',
+		  		'value': Date.now() - window.ic.pageLoad,
+		  		'event_category': 'timing',
+		  		'event_label': 'IC App'
+				})
+			})
+			gtag('event', 'page_mount_end', {
+	  		'name': 'pageMount',
+	  		'value': Date.now() - window.ic.pageLoad,
+	  		'event_category': 'timing',
+	  		'event_label': 'IC App'
 			})
 		})
 		document.addEventListener('click', a => {

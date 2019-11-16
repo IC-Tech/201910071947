@@ -46,8 +46,9 @@ class IChat extends IAR {
 		firebase.auth().getRedirectResult().then(a => {
 			const b = a => location = sessionStorage.getItem('referrer') ? sessionStorage.getItem('referrer') : location.origin
 			if (a.user) {
+				var c = a.additionalUserInfo.providerId
 				gtag('event', a.additionalUserInfo.isNewUser ? 'sign_up' : 'login', {
-					method : a.additionalUserInfo.providerId == 'google.com' ? 'Google' : (a.additionalUserInfo.providerId == 'facebook.com' ? 'Facebook' : 'Unknown'),
+					method : (c.substring(0, 1).toUpperCase() + c.substr(1)).substr(0, (c = c.indexOf('.')) > 0 ? c : undefined),
 					'event_callback': a => b()
 				})
 				setTimeout(a => {
@@ -63,6 +64,12 @@ class IChat extends IAR {
 			if(a.b == 0) icApp.ds({t: 'mb'}).v.checked = false
 		})
 		this.update({ready:true})
+		;(['page_mount_end', 'Signin Page Load']).forEach(a => gtag('event', a, {
+  		'name': 'pageMount',
+  		'value': Date.now() - window.ic.pageLoad,
+  		'event_category': 'timing',
+  		'event_label': 'IC App'
+		}))
 	}
 	didUpdate() {}
 	close() {
