@@ -29,7 +29,12 @@ class IChat extends IAR {
 		this.functions = IC_DEV ? `http://192.168.8.20:5001/${a.projectId}/${a.locationId}1/` : `https://us-central1-${a.projectId}.cloudfunctions.net/`
 	}
 	didMount() {
-		this.update({UI:1})
+		firebase.auth().onAuthStateChanged(user => {
+			this.update(Object.assign({user}, user ? ({}) : ({UI:1})))
+			if(!user) return
+			this.analytics.setUserId(user.uid)
+			this.update({UI:1})
+		})
 		document.addEventListener('click', a => {
 			a = {a: new icApp.e(a.target), b: 0}
 			for(var b=0; b<3 && a.b == 0; b++)
