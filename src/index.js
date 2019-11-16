@@ -131,7 +131,7 @@ class IChat extends IAR {
 		this.user = user.uid
 		this.analytics.setUserId(this.user)
 		this.firestore = firebase.firestore()
-		this.firestore.collection('messages').orderBy('t', 'asc').limit(20).onSnapshot(this.mess)
+		this.firestore.collection('messages').orderBy('t', 'asc').onSnapshot(this.mess)
 		this.saveFCM()
 		this.started = true
 	}
