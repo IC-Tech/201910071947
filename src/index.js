@@ -52,6 +52,7 @@ class IChat extends IAR {
 			showProfile: false
 		}
 		this.send = this.send.bind(this)
+		this.showAll = this.showAll.bind(this)
 		this.closeProfile = this.closeProfile.bind(this)
 		var a = firebase.app().options
 		this.analytics = firebase.analytics()
@@ -102,15 +103,26 @@ class IChat extends IAR {
 			]})
 		}
 		this.mess = (a => {
-			a.docChanges().map(a => ({a: a.type == "added" ? 0 : (a.type == "modified" ? 1 : 2), i: (a = a.doc).id, d: a.data()})).forEach((a,b) => {
+			var a = a.docChanges().map(a => ({a: a.type == "added" ? 0 : (a.type == "modified" ? 1 : 2), i: (a = a.doc).id, d: a.data()}))
+			if(!this.firstLoad && a.length > 20) {
+				this.messSkip = a.slice(0, a.length - 20).map(a=> {
+					a.d.i = a.i
+					a.d.t = a.d.t ? a.d.t.toDate().getTime() : Date.now()
+					return a.d
+				})
+				a = a.slice(a.length - 20)
+				console.log(this.messSkip, a)
+			}
+			a.forEach((a,b,c) => {
 				a.d.i = a.i
 				a.d.t = a.d.t ? a.d.t.toDate().getTime() : Date.now()
 				if(a.a == 0) this.messages.push(a.d)
 				else if(a.a == 1) {
 					this.messages = this.messages.map(b => a.i != b.i ? b : a.d)
 				}
-				this.update()
+				if(b == (c.length - 1)) this.update()
 			})
+			this.firstLoad = true
 		}).bind(this)
 	}
 	saveFCM() {
@@ -175,6 +187,11 @@ class IChat extends IAR {
 	willUpdate() {
 		if(this.data.UI2 != this.pevData.UI2) gtag('event', 'screen_view', { 'screen_name': (['homepage', 'messages'])[this.data.UI2] })
 	}
+	showAll(a) {
+		this.messages = this.messSkip.concat(this.messages)
+		this.messSkip = undefined
+		this.update()
+	}
 	close() {
 		window.close()
 	}
@@ -185,7 +202,7 @@ class IChat extends IAR {
 		return ([
 			{ s: {display: this.data.ready ? 'flex' : 'none'}, ch: [
 				{ ch: [
-					{ e: [['onclick', a=> (a = location) == a.origin || a == a.origin + '/' ? 0 : (location = a.origin)]] },
+					{ e: [['onclick', a=> (a = location) == a.origin || a == a.origin + '/' ? this.update({UI2: 0}) : (location = a.origin)]] },
 					{ ch: [
 						{}, {},
 						{ ch: [
@@ -209,7 +226,13 @@ class IChat extends IAR {
 						{ s:{display: this.data.UI2 == 1 ? 'block' : 'none'}, ch: [
 							{ ch: [
 								{},
-								{ ch: this.messages.map(a => this.mc(a))}
+								{ ch: (!this.messSkip ? ([]): ([
+									{ t:'div', cl: 'm-all', ch: [
+										{ t:'button', e: [['onclick', this.showAll ]], ch: [
+											{ t: 'span', txt: 'Show all messages' }
+										]}
+									]}
+								])).concat(this.messages.map(a => this.mc(a))) }
 							]}, 
 							{ ch: [
 								{},
