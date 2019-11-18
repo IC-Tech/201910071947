@@ -30,7 +30,8 @@
     "webpack-merge": "^4.2.1"
   },
   "dependencies": {
-    "serve": "^11.1.0"
+    "git-revision-webpack-plugin": "^3.0.4",
+    "serve": "^11.1.0",
   },
   "author": "Imesh Chamara <imesh1chamara@gmail.com> (https://ic-tech.now.sh/)",
   "license": "ISC",
