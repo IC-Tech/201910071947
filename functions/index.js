@@ -78,13 +78,12 @@ exports.sendNotifications = functions.firestore.document('messages/{messageId}')
 			c: c.photoURL || '/images/72159534_p0.png',
 			d: a.t.toDate().getTime().toString()
 		}
-	})).results.forEach((b, a) => {
-		c = []
-		var e = b.error
-    if (e && (e.code === 'messaging/invalid-registration-token' || e.code === 'messaging/registration-token-not-registered'))
-    	c.push(admin.firestore().collection('messages').doc(tokens[a]).delete())
-  })
-	await Promise.all(c)
+	})).results.forEach(async (b, a) => {
+		b = b.error
+		if (b && (b.code === 'messaging/invalid-registration-token' || b.code === 'messaging/registration-token-not-registered'))
+			d.push(await admin.firestore().collection('fcmTokens').doc(tokens[a]).delete())
+	})
+  await Promise.all(d)
 })
 exports.test = functions.https.onRequest(async (req, res) => {
 	res.send('OK')
