@@ -34,6 +34,8 @@ class IChat extends IAR {
 			this.analytics.setUserId(user.uid)
 			this.update({UI:1})
 		})
+		icApp.ds({i:'0'}).txt = 'IChat@' + __VER__ + ', G:' + __GBRANCH__ + '@' + __GVER__ + ', B@' + __BUILD_TIME__;
+		icApp.ds({i:'1'}).txt = new Date(__BUILD_TIME__).toString();
 		document.addEventListener('click', a => {
 			a = {a: new icApp.e(a.target), b: 0}
 			for(var b=0; b<3 && a.b == 0; b++)
