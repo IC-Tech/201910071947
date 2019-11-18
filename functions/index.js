@@ -2,8 +2,8 @@ const functions = require('firebase-functions');
 const admin = require('firebase-admin');
 const serviceAccount = require("./serviceAccountKey.json");
 var app = admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount),
-  databaseURL: "https://ichat-ictech.firebaseio.com"
+	credential: admin.credential.cert(serviceAccount),
+	databaseURL: "https://ichat-ictech.firebaseio.com"
 });
 const db = admin.firestore()
 
@@ -16,10 +16,10 @@ const sendJ = (a,...b) => {
 const Send = (a, b = true) => JSON.stringify({response: a, success: b})
 const JInit = a => ([
 	['Access-Control-Allow-Origin', '*'],
-  ['Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS'],
-  ['Access-Control-Allow-Headers', 'X-Requested-With, Content-Type, Accept'],
-  ['WebServer', 'IC-Tech Server; Copyright (c) Imesh Chamara 2019'],
-  ['Content-Type', 'application/json; charset=UTF-8']
+	['Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS'],
+	['Access-Control-Allow-Headers', 'X-Requested-With, Content-Type, Accept'],
+	['WebServer', 'IC-Tech Server; Copyright (c) Imesh Chamara 2019'],
+	['Content-Type', 'application/json; charset=UTF-8']
 ]).forEach(b => a.set(b[0], b[1]))
 const queryC = (a,d, ...b) => {
 	JInit(d)
@@ -42,7 +42,7 @@ exports.getUser = functions.https.onRequest(async (req, res) => {
 	if(q === false) return
 	var a
 	try {
-	  res.send(Send(sendJ(await admin.auth().getUser(q[0]), 'uid', 'displayName', 'photoURL')))
+		res.send(Send(sendJ(await admin.auth().getUser(q[0]), 'uid', 'displayName', 'photoURL')))
 	}
 	catch(e) {
 		if(e.code === 'auth/user-not-found') return sysErr(res, ['User not found'])
@@ -56,7 +56,7 @@ exports.getFullUser = functions.https.onRequest(async (req, res) => {
 	try {
 		var a = await admin.auth().getUser(q[0])
 		var b = await db.collection('users').doc(q[0]).get()
-	  res.send(Send(Object.assign(sendJ(a, 'uid', 'displayName', 'photoURL'), sendJ(b.data(), 'about', 'tags'))))
+		res.send(Send(Object.assign(sendJ(a, 'uid', 'displayName', 'photoURL'), sendJ(b.data(), 'about', 'tags'))))
 	}
 	catch(e) {
 		if(e.code === 'auth/user-not-found') return sysErr(res, ['User not found'])
@@ -70,12 +70,13 @@ exports.sendNotifications = functions.firestore.document('messages/{messageId}')
 	;(await admin.firestore().collection('fcmTokens').get()).forEach(a => tokens.push(a.id))
 	if (tokens.length <= 0) return
 	var c = await admin.auth().getUser(a.u)
+	var d = []
 	;(await admin.messaging().sendToDevice(tokens, {
-		notification: {
-			title: `${c.displayName} posted a message`,
-			body: a.m ? (a.m.length <= 100 ? a.m : a.m.substring(0, 97) + '...') : '',
-		  icon: c.photoURL || '/images/avatar/default.png',
-		  click_action: `https://${process.env.GCLOUD_PROJECT}.web.app`
+		data:{
+			a: `${c.displayName} posted a message`,
+			b: a.m ? (a.m.length <= 100 ? a.m : a.m.substring(0, 97) + '...') : '',
+			c: c.photoURL || '/images/72159534_p0.png',
+			d: a.t.toDate().getTime().toString()
 		}
 	})).results.forEach((b, a) => {
 		c = []
