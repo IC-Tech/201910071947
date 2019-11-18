@@ -91,10 +91,10 @@ class IChat extends IAR {
 			if(c.length > 0) {
 				f = []
 				for(var e = 0; e<c.length; e++) {
-					f.push(d[e])
+					if(d[e]) f.push(d[e])
 					f.push({t:'a', at:[['href', c[e][0]], ['target', '_blank']], txt: c[e][0]})
 				}
-				f.push(d[d.length - 1])
+				if(d[d.length - 1]) f.push(d[d.length - 1])
 			}
 			return ({t:'div', cl: 'con', ch: [
 				Object.assign({t: 'span'}, typeof f == 'string' ? ({txt: f}) : ({nodes: 1, ch: f})),
