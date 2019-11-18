@@ -191,6 +191,10 @@ class IChat extends IAR {
 		this.messages = this.messSkip.concat(this.messages)
 		this.messSkip = undefined
 		this.update()
+		gtag('event', "Load Message", {
+  		'event_category': 'Message',
+  		'event_label': 'Message'
+		})
 	}
 	close() {
 		window.close()
