@@ -18,12 +18,8 @@ Theme.set('red')
 if ("serviceWorker" in navigator && !navigator.serviceWorker.controller) {
   navigator.serviceWorker.register("firebase-messaging-sw.js").then(reg => {
   	firebase.messaging().useServiceWorker(reg)
-  }).catch(e => {
-    console.log('SW Registration failed with ' + e);
   })
-  navigator.serviceWorker.register("ichat-sw.js").catch(e => {
-    console.log('SW Registration failed with ' + e);
-  })
+  navigator.serviceWorker.register("ichat-sw.js")
 }
 
 new Promise((resolve, reject) => {
@@ -111,7 +107,6 @@ class IChat extends IAR {
 					return a.d
 				})
 				a = a.slice(a.length - 20)
-				console.log(this.messSkip, a)
 			}
 			a.forEach((a,b,c) => {
 				a.d.i = a.i
