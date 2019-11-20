@@ -29,7 +29,7 @@ class IChat extends IAR {
 		this.analytics = firebase.analytics()
 		this.performance = firebase.performance()
 		var a = firebase.app().options
-		this.functions = IC_DEV ? `http://192.168.8.20:5001/${a.projectId}/${a.locationId}1/` : `https://us-central1-${a.projectId}.cloudfunctions.net/`
+		this.functions = IC_DEV ? `http://localhost:5001/${a.projectId}/${a.locationId}1/` : `https://us-central1-${a.projectId}.cloudfunctions.net/`
 	}
 	didMount() {
 		firebase.auth().onAuthStateChanged(user => {
@@ -135,7 +135,9 @@ class IChat extends IAR {
 					{ s: {display: this.data.UI == 1 ? 'flex' : 'none'}, ch: [
 						{ s: {display: this.data.user ? 'flex' : 'none'}, ch: [
 							{ ch: [
-								{ d: {t:'img', i:0}, s: {'background-image': `url("${this.data.d ? this.data.d.photoURL : ''}"), url("/images/avatar/default.gif")`}},
+								{t:'a', at:[['href', this.data.d ? this.data.d.photoURL : ''], ['target', '_blank']], ch: [
+									{ d: {t:'img', i:0}, s: {'background-image': `url("${this.data.d ? this.data.d.photoURL : ''}"), url("/images/avatar/default.gif")`}}
+								]},
 								{ s: {display: !this.data.edit ? 'none': 'block'}, ch: [
 									{ e: [['oninput', e => {
 										var t = e.target.files[0]
