@@ -16,21 +16,21 @@ var _root_ = new icApp.e('#root')
 Theme.set('red')
 
 if ("serviceWorker" in navigator && !navigator.serviceWorker.controller) {
-  navigator.serviceWorker.register("firebase-messaging-sw.js").then(reg => {
-  	firebase.messaging().useServiceWorker(reg)
-  })
-  navigator.serviceWorker.register("ichat-sw.js")
+	navigator.serviceWorker.register("firebase-messaging-sw.js").then(reg => {
+		firebase.messaging().useServiceWorker(reg)
+	})
+	navigator.serviceWorker.register("ichat-sw.js")
 }
 
 new Promise((resolve, reject) => {
-  const b = Notification.requestPermission(a => resolve(a))
-  if (b) {
-    b.then(resolve, reject);
-  }
+	const b = Notification.requestPermission(a => resolve(a))
+	if (b) {
+		b.then(resolve, reject);
+	}
 }).then(a => {
-  if (a !== 'granted') {
-    throw new Error('We weren\'t granted permission.');
-  }
+	if (a !== 'granted') {
+		throw new Error('We weren\'t granted permission.');
+	}
 })
 
 const defaultWait = 1200
@@ -45,11 +45,19 @@ class IChat extends IAR {
 			UI2: 0,
 			ready: false,
 			profileD: null,
-			showProfile: false
+			showProfile: false,
+			image: ''
 		}
 		this.send = this.send.bind(this)
+		this.msgin = this.msgin.bind(this)
 		this.showAll = this.showAll.bind(this)
-		this.closeProfile = this.closeProfile.bind(this)
+		this.closeD = (a => {
+			var b = {}
+			a = new icApp.e(a.target)
+			if(!(['profiles', 'image'].some(b => a.p.v.id == b))) return
+			b[a.p.v.id == 'profiles' ? 'showProfile' : 'imageUpload'] = !a.clc('d')
+			this.update(b)
+		}).bind(this)
 		var a = firebase.app().options
 		this.analytics = firebase.analytics()
 		this.performance = firebase.performance()
@@ -99,6 +107,7 @@ class IChat extends IAR {
 			]})
 		}
 		this.mess = (a => {
+			var d = !!this.firstLoad
 			var a = a.docChanges().map(a => ({a: a.type == "added" ? 0 : (a.type == "modified" ? 1 : 2), i: (a = a.doc).id, d: a.data()}))
 			if(!this.firstLoad && a.length > 20) {
 				this.messSkip = a.slice(0, a.length - 20).map(a=> {
@@ -111,27 +120,36 @@ class IChat extends IAR {
 			a.forEach((a,b,c) => {
 				a.d.i = a.i
 				a.d.t = a.d.t ? a.d.t.toDate().getTime() : Date.now()
-				if(a.a == 0) this.messages.push(a.d)
+				if(a.a == 0) {
+					if(!d && a.d.u == this.user) d=!d
+					this.messages.push(a.d)
+				}
 				else if(a.a == 1) {
 					this.messages = this.messages.map(b => a.i != b.i ? b : a.d)
 				}
-				if(b == (c.length - 1)) this.update()
+				if(b == (c.length - 1)) {
+					this.update()
+					if(d) {
+						d = icApp.qs('.cont .messages .c1')
+						d.scrollTop = (d.scrollHeight - d.offsetHeight)
+					}
+				}
 			})
 			this.firstLoad = true
 		}).bind(this)
 	}
 	saveFCM() {
 		firebase.messaging().getToken().then(a => {
-    	if (a) firebase.firestore().collection('fcmTokens').doc(a).set({uid: firebase.auth().currentUser.uid})
-    	else requestPermissions()
-	  }).catch(e => {
-	    console.error('Unable to get messaging token.', e);
-	  });
+			if (a) firebase.firestore().collection('fcmTokens').doc(a).set({uid: firebase.auth().currentUser.uid})
+			else requestPermissions()
+		}).catch(e => {
+			console.error('Unable to get messaging token.', e);
+		});
 	}
 	requestPermissions() {
-	  firebase.messaging().requestPermission().then(() => saveFCM()).catch(e => {
-	    console.error('Unable to get permission to notify.', error);
-	  })
+		firebase.messaging().requestPermission().then(() => saveFCM()).catch(e => {
+			console.error('Unable to get permission to notify.', error);
+		})
 	}
 	start(user) {
 		if(!user || this.started) return
@@ -155,10 +173,10 @@ class IChat extends IAR {
 		})
 		this.update({ready:true})
 		;(['page_mount_end', 'Home Page Load']).forEach(a => gtag('event', a, {
-  		'name': 'pageMount',
-  		'value': Date.now() - window.ic.pageLoad,
-  		'event_category': 'timing',
-  		'event_label': 'IC App'
+			'name': 'pageMount',
+			'value': Date.now() - window.ic.pageLoad,
+			'event_category': 'timing',
+			'event_label': 'IC App'
 		}))
 	}
 	send(a) {
@@ -168,15 +186,15 @@ class IChat extends IAR {
 		if(a.value.length >= 800) return dialogUI.create({name: 'Can not send Message', msg: 'The message was rejected by the server because the message was to large. maximum limit is 800 characters.', but: ['OK'],f: a=>dialogUI.remove(a.i)})
 		a = ([a.value, a.value = '', a.focus()])[0]
 		if(!a) return
-		gtag('event', "Send Message", {
-  		'event_category': 'Message',
-  		'event_label': 'Send Message'
-		})
 		this.firestore.collection('messages').add({
 			m: a,
 			u: this.user,
 			t: firebase.firestore.FieldValue.serverTimestamp()
 		}).catch(e => console.error('Error writing new message to Firebase Database', e))
+		gtag('event', "Send Message", {
+			'event_category': 'Message',
+			'event_label': 'Send Message'
+		})
 	}
 	didUpdate() {}
 	willUpdate() {
@@ -187,15 +205,17 @@ class IChat extends IAR {
 		this.messSkip = undefined
 		this.update()
 		gtag('event', "Load Message", {
-  		'event_category': 'Message',
-  		'event_label': 'Message'
+			'event_category': 'Message',
+			'event_label': 'Message'
 		})
 	}
 	close() {
 		window.close()
 	}
-	closeProfile(a) {
-		this.update({showProfile: !new icApp.e(a.target).clc('profile-d')})
+	msgin(a) {
+		if(a.inputType != 'insertText' || typeof (a = {a: this.c(a.data), b: a}).a == 'string') return
+		a.b.preventDefault()
+		this.update({image: a.a, imageUpload: true})
 	}
 	render() {
 		return ([
@@ -224,7 +244,6 @@ class IChat extends IAR {
 						]},
 						{ s:{display: this.data.UI2 == 1 ? 'block' : 'none'}, ch: [
 							{ ch: [
-								{},
 								{ ch: (!this.messSkip ? ([]): ([
 									{ t:'div', cl: 'm-all', ch: [
 										{ t:'button', e: [['onclick', this.showAll ]], ch: [
@@ -234,8 +253,8 @@ class IChat extends IAR {
 								])).concat(this.messages.map(a => this.mc(a))) }
 							]}, 
 							{ ch: [
-								{},
-								{ e: [['onclick', this.send ]]}
+								{ e: [['oninput', this.msgin ]] },
+								{ e: [['onclick', this.send ]] }
 							]}
 						]}
 					]}
@@ -243,11 +262,26 @@ class IChat extends IAR {
 			]},
 			{ s: {display: !this.data.ready ? 'flex' : 'none'} }, 
 			{ s: {display: this.data.ready && this.data.showProfile ? 'block' : 'none'}, ch: [
-				{t: 'div', cl: 'profile-d', e: [['onclick', this.closeProfile]], ch: [
+				{t: 'div', cl: 'd', e: [['onclick', this.closeD]], ch: [
 					{t: 'div', d: {t:'pd', u: this.data.profileD ? this.data.profileD : ''}, ch: [
 						{t: 'div', cl: 'a', s: {'background-image': `url("${ this.data.profileD ? this.users[this.data.profileD].image : ''}"), url("/images/avatar/default.gif")`}},
 						{t: 'span', txt: this.data.profileD ? this.users[this.data.profileD].name : ''},
 						{t:'a', txt: 'View', at: [['href', '/profile.html?tid=' + (this.data.profileD ? this.data.profileD : '')]]}
+					]}
+				]}
+			]},
+			{ s: {display: this.data.ready && this.data.imageUpload ? 'block' : 'none'}, ch: [
+				{t: 'div', cl: 'd', e: [['onclick', this.closeD]], ch: [
+					{t: 'div', ch: [
+						{t:'img', at:[['src', this.data.image]] },
+						{t: 'div', ch: [
+							{t: 'button', cl: 'ic-btn0', ch: [
+								{t: 'span', txt: 'UPLOAD'}
+							]},
+							{t: 'button', cl: 'ic-btn0', e: [['onclick', a => this.update({imageUpload: false})]], ch: [
+								{t: 'span', txt: 'CANCEL'}
+							]}
+						]}
 					]}
 				]}
 			]}

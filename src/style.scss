@@ -56,6 +56,7 @@
 			width: 100%;
 			height: calc(100vh - 90px);
 			overflow-y: auto;
+			scroll-behavior: smooth;
 			> .c1 {
 				display: none;
 			}
@@ -186,9 +187,9 @@
 		}
 	}
 }
-#profiles {
+#profiles, #image {
 	z-index: 2;
-	.profile-d {
+	> div {
 		display: flex;
 		position: absolute;
 		left: 0;
@@ -198,44 +199,79 @@
 		background-color: #0009;
 		flex-direction: column;
 		justify-content: center;
+		cursor: url('http://localhost:3000/images/close.png') 11 11, pointer;
 		> div {
-			min-height: 10px;
 			background-color: #fff;
 			box-shadow: 0 0 10px #0006;
-			padding: 10px 20px;
 			border-radius: 16px;
 			overflow-y: auto;
-			&, > * {
-				display: block;
-				margin: 10px auto;
-				text-align: center;
-			}
+			cursor: initial;
 		}
-		.a {
-			width: 30vw;
-			height: 30vw;
-			max-width: 280px;
-			max-height: 280px;
-			background-position: center top;
-			background-size: cover;
-			border-radius: 50%;
-			background-image: url('/images/avatar/default.gif');
+	}
+}
+#profiles > div {
+	> div {
+		padding: 10px 20px;
+		min-height: 10px;
+		&, > * {
+			display: block;
+			margin: 10px auto;
+			text-align: center;
 		}
-		span {
-			font-size: 19px;
-			max-width: 80vw;
-			word-wrap: break-word;
-			max-height: 60vh;
-			overflow-y: auto;
+	}
+	.a {
+		width: 30vw;
+		height: 30vw;
+		max-width: 280px;
+		max-height: 280px;
+		background-position: center top;
+		background-size: cover;
+		border-radius: 50%;
+		background-image: url('/images/avatar/default.gif');
+	}
+	span {
+		font-size: 19px;
+		max-width: 80vw;
+		word-wrap: break-word;
+		max-height: 60vh;
+		overflow-y: auto;
+	}
+	a {
+		margin: 0 auto 10px;
+		text-decoration: none;
+		display: inline-block;
+		background-color: col(light-6);
+		padding: 6px 12px;
+		color: #fff;
+		border-radius: 18px;
+	}
+}
+#image > div {
+	> div {
+		max-width: 80%;
+		margin: 0 auto;
+		padding: 20px 20px 10px 20px;
+		> div {
+			display: flex;
+			justify-content: center;
+			flex-direction: row;
+			flex-wrap: wrap;
 		}
-		a {
-			margin: 0 auto 10px;
-			text-decoration: none;
-			display: inline-block;
-			background-color: col(light-6);
-			padding: 6px 12px;
-			color: #fff;
-			border-radius: 18px;
-		}
+	}
+	img {
+		width: 100%;
+		max-width: 480px;
+		max-height: 600px;
+		/*box-shadow: 0 0 10px #0008;*/
+		background-image: url("/images/avatar/default.gif");
+		background-size: cover;
+		background-position: center top;
+		min-width: 180px;
+		min-height: 180px;
+	}
+	.a {
+		display: block;
+		width: 60vw;
+		height: 60vw;
 	}
 }
