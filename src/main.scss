@@ -38,12 +38,12 @@ body, html {
   &, & > * {
     color: #fff;
   }
-  &:active:not(.dis) {
+  &:active:not(.dis), &:active:not(:disabled) {
     transition-duration: $default-transition;
     background-color: col(light-8);
     box-shadow: 0 2px 4px #0006;
   }
-  &.dis {
+  &.dis, &:disabled {
     background-color: #aaa;
   }
 }
