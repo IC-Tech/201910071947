@@ -118,6 +118,11 @@
 					font-size: 14px;
 					max-width: 68%;
 					word-wrap: break-word;
+					max-height: 400px;
+					overflow-y: hidden;
+					&:hover {
+						overflow-y: auto;
+					}
 				}
 				&:nth-child(2) {
 					display: block;
