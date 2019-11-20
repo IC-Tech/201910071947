@@ -76,24 +76,24 @@ class IChat extends IAR {
 			if(a.d.t != 'msg-p') return
 			this.update({profileD: a.d.u, showProfile: true})
 		}
-		this.mc = a => ([this.userInit(a.u),({t:'div', cl: ['ms', this.user == a.u ? 'm2': 'm1'], ch: /*this.user == a.u ? [this.mc.a(a)] :*/ [
-			{t:'div', at:[['title', this.users[a.u].name]], s: {'background-image': `url("${ this.users[a.u].image ? this.users[a.u].image : ''}"), url("/images/avatar/default.gif")` }, d: {t:'msg-p', u: a.u}, e: [['onclick', this.showProfile]]},
-			this.mc.a(a)
-		]})])[1]
+		this.mc = a => ([this.userInit(a.u),({t:'div', cl: ['ms', this.user == a.u ? 'm2': 'm1'],
+			ch: (this.user == a.u ? ([]) : ([{t:'div', at:[['title', this.users[a.u].name]], s: {'background-image': `url("${ this.users[a.u].image ? this.users[a.u].image : ''}"), url("/images/avatar/default.gif")` }, d: {t:'msg-p', u: a.u}, e: [['onclick', this.showProfile]], ch: []}])).concat(this.mc.a(a))
+		})])[1]
+		this.a = /(?:https?:\/\/(?:www\.)?)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b(?:[-a-zA-Z0-9()@:%_\+.~#?&//=]*)/gi
+		this.b = a => [Array.from(a.matchAll(this.a)), a.split(this.a)]
+		this.c = b => (a = this.b(b))[0].length == 1 && !a[1].some(a => !!a) ? a[0][0] : b
 		this.mc.a = a => {
 			var f = a.m
-			var b = /(?:https?:\/\/(?:www\.)?)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b(?:[-a-zA-Z0-9()@:%_\+.~#?&//=]*)/gi
-			var c = Array.from(f.matchAll(b))
-			var d = f.split(b)
-			if(c.length > 0) {
+			var b = this.b(f)
+			if(b[0].length > 0) {
 				f = []
-				for(var e = 0; e<c.length; e++) {
-					if(d[e]) f.push(d[e])
-					f.push({t:'a', at:[['href', c[e][0]], ['target', '_blank']], txt: c[e][0]})
+				for(var e = 0; e<b[0].length; e++) {
+					if(b[1][e]) f.push(b[1][e])
+					f.push({t:'a', at:[['href', b[0][e][0].indexOf('://') > 0 ? b[0][e][0] : ('http://' + b[0][e][0])], ['target', '_blank']], txt: b[0][e][0]})
 				}
-				if(d[d.length - 1]) f.push(d[d.length - 1])
+				if(b[1][b[1].length - 1]) f.push(b[1][b[1].length - 1])
 			}
-			return ({t:'div', cl: 'con', ch: [
+			return ({t:'div', cl: 'con', s: {'background-image': 'none'}, at:[['title', null]], e: [['onclick', null]], ch: [
 				Object.assign({t: 'span'}, typeof f == 'string' ? ({txt: f}) : ({nodes: 1, ch: f})),
 				{t: 'span', txt: new Date(a.t).toString() }
 			]})
@@ -150,7 +150,7 @@ class IChat extends IAR {
 		document.addEventListener('click', a => {
 			a = {a: new icApp.e(a.target), b: 0}
 			for(var b=0; b<3 && a.b == 0; b++)
-				a.b = (a.a.v.id == 'menu-btn' ? 1 : (a.a = a.a.p) ? 0 : 0)
+				a.b = (a.a.v && a.a.v.id == 'menu-btn' ? 1 : (a.a = a.a.v ? a.a.p : a.a) ? 0 : 0)
 			if(a.b == 0) icApp.ds({t: 'mb'}).v.checked = false
 		})
 		this.update({ready:true})
