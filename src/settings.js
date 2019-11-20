@@ -28,7 +28,7 @@ class IChat extends IAR {
 		this.analytics = firebase.analytics()
 		this.performance = firebase.performance()
 		var a = firebase.app().options
-		this.functions = IC_DEV ? `http://192.168.8.20:5001/${a.projectId}/${a.locationId}1/` : `https://us-central1-${a.projectId}.cloudfunctions.net/`
+		this.functions = IC_DEV ? `http://localhost:5001/${a.projectId}/${a.locationId}1/` : `https://us-central1-${a.projectId}.cloudfunctions.net/`
 	}
 	didMount() {
 		firebase.auth().onAuthStateChanged(user => {
