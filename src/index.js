@@ -197,6 +197,22 @@ class IChat extends IAR {
 		})
 	}
 	didUpdate() {}
+	upload(a) {
+		if(!this.user) return
+		var a = icApp.ds({t:'mess',i:'0'}).v
+		if(!a) return
+		a.value = ''
+		a.focus()
+		this.firestore.collection('messages').add({
+			i: this.data.i1,
+			u: this.user,
+			t: firebase.firestore.FieldValue.serverTimestamp()
+		}).catch(e => console.error('Error writing new message to Firebase Database', e))
+		gtag('event', "Send Image", {
+			'event_category': 'Message',
+			'event_label': 'Send Message'
+		})
+	}
 	willUpdate() {
 		if(this.data.UI2 != this.pevData.UI2) gtag('event', 'screen_view', { 'screen_name': (['homepage', 'messages'])[this.data.UI2] })
 	}
@@ -275,7 +291,7 @@ class IChat extends IAR {
 					{t: 'div', ch: [
 						{t:'img', at:[['src', this.data.i1]] },
 						{t: 'div', ch: [
-							{t: 'button', cl: 'ic-btn0', ch: [
+							{t: 'button', cl: 'ic-btn0', e: [['onclick', this.upload]], ch: [
 								{t: 'span', txt: 'UPLOAD'}
 							]},
 							{t: 'button', cl: 'ic-btn0', e: [['onclick', a => this.update({i0: false})]], ch: [
