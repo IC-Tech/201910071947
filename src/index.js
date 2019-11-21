@@ -43,9 +43,9 @@ class IChat extends IAR {
 		this.data = {
 			UI: 0,
 			UI2: 0,
-			ready: false,
-			profileD: null,
-			showProfile: false,
+			r: false,
+			p0: null,
+			p1: false,
 			image: ''
 		}
 		this.send = this.send.bind(this)
@@ -55,7 +55,7 @@ class IChat extends IAR {
 			var b = {}
 			a = new icApp.e(a.target)
 			if(!(['profiles', 'image'].some(b => a.p.v.id == b))) return
-			b[a.p.v.id == 'profiles' ? 'showProfile' : 'imageUpload'] = !a.clc('d')
+			b[a.p.v.id == 'profiles' ? 'p1' : 'i0'] = !a.clc('d')
 			this.update(b)
 		}).bind(this)
 		var a = firebase.app().options
@@ -79,13 +79,13 @@ class IChat extends IAR {
 			return this.users
 		}
 		this.messages = []
-		this.showProfile = a => {
+		this.p1 = a => {
 			a = new icApp.e(a.target)
 			if(a.d.t != 'msg-p') return
-			this.update({profileD: a.d.u, showProfile: true})
+			this.update({p0: a.d.u, p1: true})
 		}
 		this.mc = a => ([this.userInit(a.u),({t:'div', cl: ['ms', this.user == a.u ? 'm2': 'm1'],
-			ch: (this.user == a.u ? ([]) : ([{t:'div', at:[['title', this.users[a.u].name]], s: {'background-image': `url("${ this.users[a.u].image ? this.users[a.u].image : ''}"), url("/images/avatar/default.gif")` }, d: {t:'msg-p', u: a.u}, e: [['onclick', this.showProfile]], ch: []}])).concat(this.mc.a(a))
+			ch: (this.user == a.u ? ([]) : ([{t:'div', at:[['title', this.users[a.u].name]], s: {'background-image': `url("${ this.users[a.u].image ? this.users[a.u].image : ''}"), url("/images/avatar/default.gif")` }, d: {t:'msg-p', u: a.u}, e: [['onclick', this.p1]], ch: []}])).concat(this.mc.a(a))
 		})])[1]
 		this.a = /(?:https?:\/\/(?:www\.)?)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b(?:[-a-zA-Z0-9()@:%_\+.~#?&//=]*)/gi
 		this.b = a => [Array.from(a.matchAll(this.a)), a.split(this.a)]
@@ -171,7 +171,7 @@ class IChat extends IAR {
 				a.b = (a.a.v && a.a.v.id == 'menu-btn' ? 1 : (a.a = a.a.v ? a.a.p : a.a) ? 0 : 0)
 			if(a.b == 0) icApp.ds({t: 'mb'}).v.checked = false
 		})
-		this.update({ready:true})
+		this.update({r:true})
 		;(['page_mount_end', 'Home Page Load']).forEach(a => gtag('event', a, {
 			'name': 'pageMount',
 			'value': Date.now() - window.ic.pageLoad,
@@ -215,11 +215,11 @@ class IChat extends IAR {
 	msgin(a) {
 		if(a.inputType != 'insertText' || typeof (a = {a: this.c(a.data), b: a}).a == 'string') return
 		a.b.preventDefault()
-		this.update({image: a.a, imageUpload: true})
+		this.update({i1: a.a, i0: true})
 	}
 	render() {
 		return ([
-			{ s: {display: this.data.ready ? 'flex' : 'none'}, ch: [
+			{ s: {display: this.data.r ? 'flex' : 'none'}, ch: [
 				{ ch: [
 					{ e: [['onclick', a=> (a = location) == a.origin || a == a.origin + '/' ? this.update({UI2: 0}) : (location = a.origin)]] },
 					{ ch: [
@@ -260,25 +260,25 @@ class IChat extends IAR {
 					]}
 				]}
 			]},
-			{ s: {display: !this.data.ready ? 'flex' : 'none'} }, 
-			{ s: {display: this.data.ready && this.data.showProfile ? 'block' : 'none'}, ch: [
+			{ s: {display: !this.data.r ? 'flex' : 'none'} }, 
+			{ s: {display: this.data.r && this.data.p1 ? 'block' : 'none'}, ch: [
 				{t: 'div', cl: 'd', e: [['onclick', this.closeD]], ch: [
-					{t: 'div', d: {t:'pd', u: this.data.profileD ? this.data.profileD : ''}, ch: [
-						{t: 'div', cl: 'a', s: {'background-image': `url("${ this.data.profileD ? this.users[this.data.profileD].image : ''}"), url("/images/avatar/default.gif")`}},
-						{t: 'span', txt: this.data.profileD ? this.users[this.data.profileD].name : ''},
-						{t:'a', txt: 'View', at: [['href', '/profile.html?tid=' + (this.data.profileD ? this.data.profileD : '')]]}
+					{t: 'div', d: {t:'pd', u: this.data.p0 ? this.data.p0 : ''}, ch: [
+						{t: 'div', cl: 'a', s: {'background-image': `url("${ this.data.p0 ? this.users[this.data.p0].image : ''}"), url("/images/avatar/default.gif")`}},
+						{t: 'span', txt: this.data.p0 ? this.users[this.data.p0].name : ''},
+						{t:'a', txt: 'View', at: [['href', '/profile.html?tid=' + (this.data.p0 ? this.data.p0 : '')]]}
 					]}
 				]}
 			]},
-			{ s: {display: this.data.ready && this.data.imageUpload ? 'block' : 'none'}, ch: [
+			{ s: {display: this.data.r && this.data.i0 ? 'block' : 'none'}, ch: [
 				{t: 'div', cl: 'd', e: [['onclick', this.closeD]], ch: [
 					{t: 'div', ch: [
-						{t:'img', at:[['src', this.data.image]] },
+						{t:'img', at:[['src', this.data.i1]] },
 						{t: 'div', ch: [
 							{t: 'button', cl: 'ic-btn0', ch: [
 								{t: 'span', txt: 'UPLOAD'}
 							]},
-							{t: 'button', cl: 'ic-btn0', e: [['onclick', a => this.update({imageUpload: false})]], ch: [
+							{t: 'button', cl: 'ic-btn0', e: [['onclick', a => this.update({i0: false})]], ch: [
 								{t: 'span', txt: 'CANCEL'}
 							]}
 						]}
