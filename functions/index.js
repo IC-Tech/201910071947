@@ -73,9 +73,9 @@ exports.sendNotifications = functions.firestore.document('messages/{messageId}')
 	var d = []
 	;(await admin.messaging().sendToDevice(tokens, {
 		data:{
-			a: `${c.displayName} posted a message`,
+			a: `${c.displayName} posted a ${a.i ? 'photo' : 'message'}`,
 			b: a.m ? (a.m.length <= 100 ? a.m : a.m.substring(0, 97) + '...') : '',
-			c: c.photoURL || '/images/72159534_p0.png',
+			c: c.photoURL || '/images/avatar/default.png',
 			d: a.t.toDate().getTime().toString()
 		}
 	})).results.forEach(async (b, a) => {
