@@ -50,6 +50,7 @@ class IChat extends IAR {
 		}
 		this.send = this.send.bind(this)
 		this.msgin = this.msgin.bind(this)
+		this.upload = this.upload.bind(this)
 		this.showAll = this.showAll.bind(this)
 		this.closeD = (a => {
 			var b = {}
@@ -91,15 +92,21 @@ class IChat extends IAR {
 		this.b = a => [Array.from(a.matchAll(this.a)), a.split(this.a)]
 		this.c = b => (a = this.b(b))[0].length == 1 && !a[1].some(a => !!a) ? a[0][0] : b
 		this.mc.a = a => {
-			var f = a.m
-			var b = this.b(f)
-			if(b[0].length > 0) {
-				f = []
-				for(var e = 0; e<b[0].length; e++) {
-					if(b[1][e]) f.push(b[1][e])
-					f.push({t:'a', at:[['href', b[0][e][0].indexOf('://') > 0 ? b[0][e][0] : ('http://' + b[0][e][0])], ['target', '_blank']], txt: b[0][e][0]})
+			var f = []
+			if(!a.p) {
+				f = a.m
+				var b = this.b(f)
+				if(b[0].length > 0) {
+					f = []
+					for(var e = 0; e<b[0].length; e++) {
+						if(b[1][e]) f.push(b[1][e])
+						f.push({t:'a', at:[['href', b[0][e][0].indexOf('://') > 0 ? b[0][e][0] : ('http://' + b[0][e][0])], ['target', '_blank']], txt: b[0][e][0]})
+					}
+					if(b[1][b[1].length - 1]) f.push(b[1][b[1].length - 1])
 				}
-				if(b[1][b[1].length - 1]) f.push(b[1][b[1].length - 1])
+			}
+			else {
+				f = [{t:'img', at:[['src', a.p]]}]
 			}
 			return ({t:'div', cl: 'con', s: {'background-image': 'none'}, at:[['title', null]], e: [['onclick', null]], ch: [
 				Object.assign({t: 'span'}, typeof f == 'string' ? ({txt: f}) : ({nodes: 1, ch: f})),
@@ -204,13 +211,14 @@ class IChat extends IAR {
 		a.value = ''
 		a.focus()
 		this.firestore.collection('messages').add({
-			i: this.data.i1,
+			p: this.data.i1,
 			u: this.user,
 			t: firebase.firestore.FieldValue.serverTimestamp()
 		}).catch(e => console.error('Error writing new message to Firebase Database', e))
+		this.update({i0: false})
 		gtag('event', "Send Image", {
 			'event_category': 'Message',
-			'event_label': 'Send Message'
+			'event_label': 'Send Image'
 		})
 	}
 	willUpdate() {
