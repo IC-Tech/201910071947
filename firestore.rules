@@ -2,11 +2,13 @@ service cloud.firestore {
   match /databases/{database}/documents {
     match /messages/{document=**} {
       allow read: if request.auth != null;
-      allow create, update: if request.auth != null
+      allow create: if request.auth != null
         && request.resource.data.u == request.auth.token.sub
-        && (request.resource.data.m is string
-        && request.resource.data.m.size() <= 800);
-      allow delete: if false;
+        && ((request.resource.data.m is string
+        && request.resource.data.m.size() <= 800)
+        || (request.resource.data.i is string
+        && request.resource.data.i.size() <= 800));
+      allow delete, update: if false;
     }
     match /users/{userId} {
       allow read, update, delete: if request.auth.uid == userId;
