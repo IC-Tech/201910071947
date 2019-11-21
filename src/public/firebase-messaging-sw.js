@@ -29,6 +29,6 @@ messaging.setBackgroundMessageHandler(a => {
 self.addEventListener('notificationclose', a => ga('close', 'notification'))
 self.addEventListener('notificationclick', a => {
 	a.notification.close()
-	a.waitUntil(new Promise(a => setTimeout(a, 500)).then(a => clients.matchAll({includeUncontrolled: true, type: "window"}).then(a => a.some(a => ([a = [a.url == location.origin || a.url == (location.origin + '/'), a], a[0] ? a[1].focus() : 0, a[0]])[2])) ? 0 : clients.openWindow(location.origin)))
+	a.waitUntil(new Promise(a => setTimeout(a, 3000)).then(a => clients.matchAll({includeUncontrolled: true, type: "window"}).then(a => a.some(a => ([a = [a.url == location.origin || a.url == (location.origin + '/'), a], a[0] ? a[1].focus() : 0, a[0]])[2])) ? 0 : clients.openWindow(location.origin)))
 	ga('click', 'notification')
 });
