@@ -124,6 +124,9 @@
 					&:hover {
 						overflow-y: auto;
 					}
+					img {
+						max-width: 100%;
+					}
 				}
 				&:nth-child(2) {
 					display: block;
